@@ -1,70 +1,22 @@
-# Getting Started with Create React App
+# Pre-requisites
+## What is TFT?
+https://teamfighttactics.leagueoflegends.com/
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## What is Think Fast?
+_"Shop refreshes are free until the end of this round. Traits and other augments do not benefit from these free shops."_
 
-## Available Scripts
+### What's so special about it?
+One of the core aspects of making your army stronger is by combining multiple of the same unit into one. 
+The most common way to obtain these units is through the shop.
+Every round, the shop will offer 5 units to buy with gold. The units offered might not be what the player is after so they must spend 2 gold to refresh the shop to see a new **random** set of units offered. 
 
-In the project directory, you can run:
+This augment allows the player to spend the scarce gold on buying units rather than investing it in shop refreshes which can be expensive.
+In other words, the _faster_ the player can perform the necessary actions and process new information, the better they can utilise their economy to strength their army.
 
-### `npm start`
+However, the chance of getting this specific augment is rare (TODO: Math) so many player do not get to practice this skill often. I myself have only picked this augment once in 100+ games.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+# So what is thinkfaster?
+An overly simplified imitation of the user interface and Think Fast augment from TFT. After an embarrissing display of skill when picking this augment, I decided to create this application to give players an environment to practice this rare scenario.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## TL;DR
+I want to be able to do this: https://www.youtube.com/watch?v=q3MEeuNZHII
