@@ -1,34 +1,54 @@
 import logo from './logo.svg';
 import './App.css';
+import { useState } from 'react';
 
-function HalfSquare(props) {
-  return <button className="halfSquare">{props.value}</button>
+function Action(props) {
+  return <button className="halfSquare" onClick={() => props.onClick()}>{props.text}</button>
 }
 
-function Square(props) {
-  return <button className="square">{props.value}</button>
+function Unit(props) {
+  return <button className={props.tier}>{props.champion}</button>
 }
 
 function Shop(props) {
   return (
     <div className="shop">
-      <Square value={props.value} />
-      <Square value={props.value} />
-      <Square value={props.value} />
-      <Square value={props.value} />
-      <Square value={props.value} />
+      {(props.units)?.map((object, i) => <Unit key={i} tier={object.tier} champion={object.champion} />)}
     </div>
   )
 }
 
 function ActionBar(props) {
+  function generateShop(shopSize) {
+    let newUnits = [];
+    for (let i = 0; i < shopSize; i++) {
+      let tier = "tier" + Math.ceil(Math.random() * 5);
+      let champion = (Math.random() + 1).toString(36).substring(7);
+      
+      newUnits[i] = {
+        tier: tier,
+        champion: champion
+      }
+    }
+    return newUnits;
+  };
+
+  function refreshShop(shopSize) {
+    setUnits(generateShop(shopSize));
+  };
+
+  var initUnits = generateShop(props.shopSize);
+  const [units, setUnits] = useState(initUnits);
+
+  {console.log(props.shopSize)}
+
   return (
     <div className="row">
       <div className="actions">
-        <HalfSquare value={props.value} />
-        <HalfSquare value={props.value} />
-        </div>
-      <Shop value={props.value} />      
+        <Action text="Buy XP (4g)" />
+        <Action text="Refresh (2g)" onClick={() => refreshShop(props.shopSize)}/>
+      </div>
+      <Shop shopSize={props.shopSize} units={units} />      
     </div>
   )
 }
@@ -41,10 +61,10 @@ function App() {
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
-        <Square value="1" />
+        <Unit value="1" />
         <Shop value="1" />
         <p></p>
-        <ActionBar value="1" />
+        <ActionBar value="1" shopSize="5" />
         <a
           className="App-link"
           href="https://reactjs.org"

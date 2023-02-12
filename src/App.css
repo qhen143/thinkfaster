@@ -37,21 +37,45 @@
   }
 }
 
-.square {
+.tier1, .tier2, .tier3, .tier4, .tier5, .tier7 {
   background: #fff;
   border: 1px solid #999;
   /* float: left; */
   font-size: 24px;
   font-weight: bold;
   line-height: 34px;
-  height: 34px;
+  height: 30vh;
+  width: 15vw;
   /* margin-right: -1px;
   margin-top: -1px; */
   padding: 0;
   text-align: center;
-  width: 34px;
   /* display: flex;
   flex-direction: row; */
+}
+
+.tier1 {
+  background: #fff;
+}
+
+.tier2 {
+  background: rgb(34, 218, 147);
+}
+
+.tier3 {
+  background: rgb(0, 217, 255);
+}
+
+.tier4 {
+  background: rgb(234, 0, 255);
+}
+
+.tier5 {
+  background: rgb(255, 217, 0);
+}
+
+.tier7 {
+  background: rgb(255, 4, 4);
 }
 
 .halfSquare {
@@ -61,12 +85,12 @@
   font-size: 24px;
   font-weight: bold;
   line-height: 34px;
-  height: 17px;
+  height: 15vh;
+  width: 20vw;
   /* margin-right: -1px;
   margin-top: -1px; */
   padding: 0;
   text-align: center;
-  width: 34px;
   /* display: flex;
   flex-direction: column; */
   display: block;
