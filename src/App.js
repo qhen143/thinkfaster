@@ -6,19 +6,59 @@ function Action(props) {
   return <button className="halfSquare" onClick={() => props.onClick()}>{props.text}</button>
 }
 
-function Unit(props) {
-  return <button className={props.tier}>{props.champion}</button>
+function ShopUnit(props) {
+  return <button className={props.tier} onClick={() => props.onClick()}>{props.champion}</button>
 }
 
 function Shop(props) {
   return (
     <div className="shop">
-      {(props.units)?.map((object, i) => <Unit key={i} tier={object.tier} champion={object.champion} />)}
+      {(props.units)?.map((object, i) => <ShopUnit key={i} tier={object.tier} champion={object.champion} />)}
     </div>
   )
 }
 
-function ActionBar(props) {
+function Unit(props) {
+  <button>{props.value}</button>
+}
+
+function Bench() {
+  return (
+    <div></div>
+  )
+}
+
+function Board() {
+  return (
+    <div></div>
+  )
+}
+
+
+function Game(props) {
+  var initUnits = generateShop(props.shopSize);
+
+  const [bench, setBench] = useState(Array(9).fill({tier: 0, champion: 0}));
+  const [board, setBoard] = useState([[]]);
+  const [shop, setShop] = useState(initUnits);
+
+  function FindIndexOfFirstEmptyBenchSlot() {
+    for (var i = 0; i < bench.length; i++) {
+      if (bench[i].tier == 0) {
+        return i;
+      }
+    }
+    return 0;
+  }
+
+  function Buy(unit) {
+    // TODO if not bought
+    var i = FindIndexOfFirstEmptyBenchSlot();
+    var newBench = bench.slice();
+    newBench[i] = { tier: unit.tier, champion: unit.champion };
+    setBench(newBench);
+  }
+
   function generateShop(shopSize) {
     let newUnits = [];
     for (let i = 0; i < shopSize; i++) {
@@ -34,21 +74,28 @@ function ActionBar(props) {
   };
 
   function refreshShop(shopSize) {
-    setUnits(generateShop(shopSize));
+    setShop(generateShop(shopSize));
   };
 
-  var initUnits = generateShop(props.shopSize);
-  const [units, setUnits] = useState(initUnits);
-
-  {console.log(props.shopSize)}
-
   return (
-    <div className="row">
-      <div className="actions">
-        <Action text="Buy XP (4g)" />
-        <Action text="Refresh (2g)" onClick={() => refreshShop(props.shopSize)}/>
+    <div>
+      <Board />
+
+      {/* Bench  */}
+      <div className='shop'>
+        {(bench)?.map((object, i) => { return <ShopUnit key={i+123} tier={object.tier} champion={object.champion}/> })}
       </div>
-      <Shop shopSize={props.shopSize} units={units} />      
+
+      {/* ActionBar */}
+      <div className="row">
+        <div className="actions">
+          <Action text="Buy XP (4g)" />
+          <Action text="Refresh (2g)" onClick={() => refreshShop(props.shopSize)}/>
+        </div>
+        <div className="shop">
+          {(shop)?.map((object, i) => <ShopUnit key={i} tier={object.tier} champion={object.champion} onClick={() => Buy(object)}/>)}
+        </div>    
+      </div>
     </div>
   )
 }
@@ -61,10 +108,8 @@ function App() {
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
-        <Unit value="1" />
-        <Shop value="1" />
         <p></p>
-        <ActionBar value="1" shopSize="5" />
+        <Game value="1" shopSize="5" />
         <a
           className="App-link"
           href="https://reactjs.org"
