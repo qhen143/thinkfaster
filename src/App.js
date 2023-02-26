@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 function Action(props) {
@@ -8,6 +8,10 @@ function Action(props) {
 }
 
 function ShopUnit(props) {
+  return <button className={props.tier} onClick={() => props.onClick()}>{props.champion}</button>
+}
+
+function BenchUnit(props) {
   return <button className={props.tier} onClick={() => props.onClick()}>{props.champion}</button>
 }
 
@@ -38,14 +42,38 @@ function Board() {
 
 function Game(props) {
   var initUnits = generateShop(props.shopSize);
+  var initBench = Array(9).fill().map(obj => obj = {uid: uuidv4(), tier: "unit", champion: 0});
 
-  const [bench, setBench] = useState(Array(9).fill({tier: "unit", champion: 0}));
+  const [bench, setBench] = useState(initBench);
   const [board, setBoard] = useState([[]]);
   const [shop, setShop] = useState(initUnits);
 
+  const [eKeyHeld, setEKeyHeld] = useState(false);
+
+  function downHandler({key}) {
+    if (key === 'e') {
+      setEKeyHeld(true);
+    }
+  }
+
+  function upHandler({key}) {
+    if (key === 'e') {
+      setEKeyHeld(false);
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener('keydown', downHandler);
+    window.addEventListener('keyup', upHandler);
+    return () => {
+      window.removeEventListener('keydown', downHandler);
+      window.removeEventListener('keyup', upHandler);
+    };
+  }, []);
+
   function FindIndexOfFirstEmptyBenchSlot() {
     for (var i = 0; i < bench.length; i++) {
-      if (bench[i].champion == 0) {
+      if (bench[i].champion === 0) { // TODO: use something more menaingful
         return i;
       }
     }
@@ -64,7 +92,7 @@ function Game(props) {
 
     // Add to bench
     var newBench = bench.slice();
-    newBench[i] = { tier: unit.tier, champion: unit.champion };
+    newBench[i] = { uid: uid, tier: unit.tier, champion: unit.champion };
     setBench(newBench);
 
     // Remove from Shop
@@ -72,9 +100,29 @@ function Game(props) {
       {
         uid: uuidv4(),
         tier: "unit",
-        champion: "0"
+        champion: 0
       } : obj);
     setShop(newShop);
+  }
+
+  function Sell(unit, uid) {
+
+    if (!eKeyHeld) {
+      return;
+    }
+
+    if (unit.champion === 0) {
+      return;
+    }
+
+    // Remove from Bench
+    var newBench = bench.map(obj => obj.uid === uid ? 
+      {
+        uid: uuidv4(),
+        tier: "unit",
+        champion: 0
+      } : obj);
+    setBench(newBench);
   }
 
   function generateShop(shopSize) {
@@ -103,7 +151,7 @@ function Game(props) {
       {/* Bench  */}      
       <div className="row">
         <div className='shop'>
-          {(bench)?.map((object, i) => { return <ShopUnit key={object.uid} tier={object.tier} champion={object.champion}/> })}
+          {(bench)?.map((object, i) => { return <BenchUnit key={object.uid} tier={object.tier} champion={object.champion} onClick={() => Sell(object, object.uid)}/> })}
         </div>
       </div>
 
