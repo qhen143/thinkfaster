@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import { useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 function Action(props) {
   return <button className="halfSquare" onClick={() => props.onClick()}>{props.text}</button>
@@ -38,13 +39,13 @@ function Board() {
 function Game(props) {
   var initUnits = generateShop(props.shopSize);
 
-  const [bench, setBench] = useState(Array(9).fill({tier: 0, champion: 0}));
+  const [bench, setBench] = useState(Array(9).fill({tier: "unit", champion: 0}));
   const [board, setBoard] = useState([[]]);
   const [shop, setShop] = useState(initUnits);
 
   function FindIndexOfFirstEmptyBenchSlot() {
     for (var i = 0; i < bench.length; i++) {
-      if (bench[i].tier == 0) {
+      if (bench[i].champion == 0) {
         return i;
       }
     }
@@ -53,7 +54,7 @@ function Game(props) {
     return -1;
   }
 
-  function Buy(unit, index) {
+  function Buy(unit, uid) {
     var i = FindIndexOfFirstEmptyBenchSlot();
     
     // Bench is full
@@ -67,11 +68,12 @@ function Game(props) {
     setBench(newBench);
 
     // Remove from Shop
-    var newShop = shop;
-    newShop[i] = {
-        tier: "",
-        champion: ""
-      };
+    var newShop = shop.map(obj => obj.uid === uid ? 
+      {
+        uid: uuidv4(),
+        tier: "unit",
+        champion: "0"
+      } : obj);
     setShop(newShop);
   }
 
@@ -82,6 +84,7 @@ function Game(props) {
       let champion = (Math.random() + 1).toString(36).substring(7);
       
       newUnits[i] = {
+        uid: uuidv4(),
         tier: tier,
         champion: champion
       }
@@ -97,9 +100,11 @@ function Game(props) {
     <div>
       <Board />
 
-      {/* Bench  */}
-      <div className='shop'>
-        {(bench)?.map((object, i) => { return <ShopUnit key={i+123} tier={object.tier} champion={object.champion}/> })}
+      {/* Bench  */}      
+      <div className="row">
+        <div className='shop'>
+          {(bench)?.map((object, i) => { return <ShopUnit key={object.uid} tier={object.tier} champion={object.champion}/> })}
+        </div>
       </div>
 
       {/* ActionBar */}
@@ -109,7 +114,7 @@ function Game(props) {
           <Action text="Refresh (2g)" onClick={() => refreshShop(props.shopSize)}/>
         </div>
         <div className="shop">
-          {(shop)?.map((object, i) => <ShopUnit key={i} tier={object.tier} champion={object.champion} onClick={() => Buy(object, i)}/>)}
+          {(shop)?.map((object, i) => <ShopUnit key={object.uid} tier={object.tier} champion={object.champion} onClick={() => Buy(object, object.uid)}/>)}
         </div>    
       </div>
     </div>
