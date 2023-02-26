@@ -37,15 +37,15 @@
   }
 }
 
-.tier1, .tier2, .tier3, .tier4, .tier5, .tier7 {
-  background: #fff;
+.tier1, .tier2, .tier3, .tier4, .tier5, .tier7, .unit {
+  background: #333333;
   border: 1px solid #999;
   /* float: left; */
   font-size: 24px;
   font-weight: bold;
   line-height: 34px;
-  height: 30vh;
-  width: 15vw;
+  height: 20vh;
+  width: 10vw;
   /* margin-right: -1px;
   margin-top: -1px; */
   padding: 0;
@@ -85,8 +85,8 @@
   font-size: 24px;
   font-weight: bold;
   line-height: 34px;
-  height: 15vh;
-  width: 20vw;
+  height: 10vh;
+  width: 15vw;
   /* margin-right: -1px;
   margin-top: -1px; */
   padding: 0;
