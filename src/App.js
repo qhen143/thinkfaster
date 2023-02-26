@@ -48,15 +48,31 @@ function Game(props) {
         return i;
       }
     }
-    return 0;
+
+    // Bench is full
+    return -1;
   }
 
-  function Buy(unit) {
-    // TODO if not bought
+  function Buy(unit, index) {
     var i = FindIndexOfFirstEmptyBenchSlot();
+    
+    // Bench is full
+    if (i == -1) {
+      return;
+    }
+
+    // Add to bench
     var newBench = bench.slice();
     newBench[i] = { tier: unit.tier, champion: unit.champion };
     setBench(newBench);
+
+    // Remove from Shop
+    var newShop = shop;
+    newShop[i] = {
+        tier: "",
+        champion: ""
+      };
+    setShop(newShop);
   }
 
   function generateShop(shopSize) {
@@ -93,7 +109,7 @@ function Game(props) {
           <Action text="Refresh (2g)" onClick={() => refreshShop(props.shopSize)}/>
         </div>
         <div className="shop">
-          {(shop)?.map((object, i) => <ShopUnit key={i} tier={object.tier} champion={object.champion} onClick={() => Buy(object)}/>)}
+          {(shop)?.map((object, i) => <ShopUnit key={i} tier={object.tier} champion={object.champion} onClick={() => Buy(object, i)}/>)}
         </div>    
       </div>
     </div>
