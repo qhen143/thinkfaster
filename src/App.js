@@ -2,6 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import data from "./set8-5.json"
 
 function Action(props) {
   return <button className="halfSquare" onClick={() => props.onClick()}>{props.text}</button>
@@ -41,6 +42,8 @@ function Board() {
 
 
 function Game(props) {
+  const [pool] = useState(props.units);
+
   var initUnits = generateShop(props.shopSize);
   var initBench = Array(9).fill().map(obj => obj = {uid: uuidv4(), tier: "unit", champion: 0});
 
@@ -86,7 +89,7 @@ function Game(props) {
     var i = FindIndexOfFirstEmptyBenchSlot();
     
     // Bench is full
-    if (i == -1) {
+    if (i === -1) {
       return;
     }
 
@@ -125,16 +128,95 @@ function Game(props) {
     setBench(newBench);
   }
 
+  function RollTier(level) {
+    var odds = Math.random();
+    // TODO Get from DB/ make odds an object.
+    switch(level) {
+      case 3:
+        if (odds <= 0.25) {
+          return 2;
+        }
+        return 1;
+      case 4:
+        if (odds <= 0.15) {
+          return 3;
+        } else if (odds <= 0.15 + 0.30) {
+          return 2;
+        }
+        return 1;
+      case 5:
+        if (odds <= 0.02) {
+          return 4;
+        } else if (odds <= 0.02 + 0.2) {
+          return 3;
+        } else if (odds <= 0.02 + 0.2 + 0.33) {
+          return 2;
+        }
+        return 1;
+      case 6:
+        if (odds <= 0.05) {
+          return 4;
+        } else if (odds <= 0.05 + 0.3) {
+          return 3;
+        } else if (odds <= 0.05 + 0.3 + 0.4) {
+          return 2;
+        }
+        return 1; 
+      case 7:
+        if (odds <= 0.01) {
+          return 5;
+        } else if (odds <= 0.01 + 0.15) {
+          return 4;
+        } else if (odds <= 0.01 + 0.15 + 0.35) {
+          return 3;
+        } else if (odds <= 0.01 + 0.15 + 0.35 + 0.30) {
+          return 2;
+        }
+        return 1;
+      case 8:
+        if (odds <= 0.04) {
+          return 5;
+        } else if (odds <= 0.04 + 0.25) {
+          return 4;
+        } else if (odds <= 0.04 + 0.25 + 0.35) {
+          return 3;
+        } else if (odds <= 0.04 + 0.25 + 0.35 + 0.2) {
+          return 2;
+        }
+        return 1;
+      case 9:
+        if (odds <= 0.16) {
+          return 5;
+        } else if (odds <= 0.16 + 0.25) {
+          return 4;
+        } else if (odds <= 0.16 + 0.25 + 0.35) {
+          return 3;
+        } else if (odds <= 0.16 + 0.25 + 0.35 + 0.2) {
+          return 2;
+        }
+        return 1;
+      default: // Level 1 & 2
+        return 1;                
+    }
+  }
+
   function generateShop(shopSize) {
     let newUnits = [];
     for (let i = 0; i < shopSize; i++) {
-      let tier = "tier" + Math.ceil(Math.random() * 5);
-      let champion = (Math.random() + 1).toString(36).substring(7);
+
+      // TODO : error handle empty shop for all relevant tiers. e.g. return dead unit.
+      let tier = RollTier(9);
+      let tierString = "tier" + tier;
+      console.log(tier);
+      console.log(pool);
+      let champion = pool[tier].pop();
+
+      // TODO error handle tier pool e.g. roll for another tier.
       
       newUnits[i] = {
         uid: uuidv4(),
-        tier: tier,
-        champion: champion
+        tier: tierString,
+        champion: champion.Name
       }
     }
     return newUnits;
@@ -170,6 +252,46 @@ function Game(props) {
 }
 
 function App() {
+
+  function GetNumberOfCopies(tier) {
+    switch(tier) {
+      case 1:
+        return 29;
+      case 2:
+        return 22;
+      case 3:
+        return 18;
+      case 4:
+        return 12;
+      case 5:
+        return 10;
+      default:
+        return 0;
+    }
+  }
+
+  function GenerateUnitPool() {
+    // TODO dont hard code tiers.
+    var unitsByTier = {
+      1: [],
+      2: [],
+      3: [],
+      4: [],
+      5: []
+    };
+    data.units.forEach(element => {
+      var tier = element.Tier;
+      let numDuplicates = GetNumberOfCopies(tier);
+      for (var i = 0; i < numDuplicates; i++) {
+        var copy = {...element};
+        copy.uid = uuidv4();
+        console.log(tier);
+        unitsByTier[tier].push(copy);
+      }
+    }); 
+    return unitsByTier;
+  }
+
   return (
     <div className="App">
       <header className="App-header">
@@ -178,7 +300,7 @@ function App() {
           Edit <code>src/App.js</code> and save to reload.
         </p>
         <p></p>
-        <Game value="1" shopSize="5" />
+        <Game value="1" shopSize="5" units={GenerateUnitPool()} />
         <a
           className="App-link"
           href="https://reactjs.org"

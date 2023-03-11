@@ -1,0 +1,252 @@
+{
+    "units": [
+        {
+            "Name": "Ashe",
+            "Tier": 1
+        },
+        {
+            "Name": "Blitzcrank",
+            "Tier": 1
+        },
+        {
+            "Name": "Gangplank",
+            "Tier": 1
+        },
+        {
+            "Name": "Kayle",
+            "Tier": 1
+        },
+        {
+            "Name": "Blitzcrank",
+            "Tier": 1
+        },
+        {
+            "Name": "Lucian",
+            "Tier": 1
+        },
+        {
+            "Name": "Lulu",
+            "Tier": 1
+        },
+        {
+            "Name": "Lux",
+            "Tier": 1
+        },
+        {
+            "Name": "Nasus",
+            "Tier": 1
+        },
+        {
+            "Name": "Pantheon",
+            "Tier": 1
+        },
+        {
+            "Name": "Poppy",
+            "Tier": 1
+        },
+        {
+            "Name": "Renekton",
+            "Tier": 1
+        },
+        {
+            "Name": "Sylas",
+            "Tier": 1
+        },
+        {
+            "Name": "Wukong",
+            "Tier": 1
+        },
+
+        {
+            "Name": "Annie",
+            "Tier": 2
+        },
+        {
+            "Name": "Camille",
+            "Tier": 2
+        },
+        {
+            "Name": "Draven",
+            "Tier": 2
+        },
+        {
+            "Name": "Ezreal",
+            "Tier": 2
+        },
+        {
+            "Name": "Fiora",
+            "Tier": 2
+        },
+        {
+            "Name": "Jinx",
+            "Tier": 2
+        },
+        {
+            "Name": "Lee Sin",
+            "Tier": 2
+        },
+        {
+            "Name": "Malphite",
+            "Tier": 2
+        },
+        {
+            "Name": "Pyke",
+            "Tier": 2
+        },
+        {
+            "Name": "Rell",
+            "Tier": 2
+        },
+        {
+            "Name": "Sivir",
+            "Tier": 2
+        },
+        {
+            "Name": "Vi",
+            "Tier": 2
+        },
+        {
+            "Name": "Yasuo",
+            "Tier": 2
+        },
+
+
+        {
+            "Name": "Alistar",
+            "Tier": 3
+        },
+        {
+            "Name": "Gnar",
+            "Tier": 3
+        },
+        {
+            "Name": "Jax",
+            "Tier": 3
+        },
+        {
+            "Name": "Kaisa",
+            "Tier": 3
+        },
+        {
+            "Name": "Leblanc",
+            "Tier": 3
+        },
+        {
+            "Name": "Morgana",
+            "Tier": 3
+        },
+        {
+            "Name": "Nilah",
+            "Tier": 3
+        },
+        {
+            "Name": "Rammus",
+            "Tier": 3
+        },
+        {
+            "Name": "Riven",
+            "Tier": 3
+        },
+        {
+            "Name": "Shen",
+            "Tier": 3
+        },
+        {
+            "Name": "Sona",
+            "Tier": 3
+        },
+        {
+            "Name": "Vayne",
+            "Tier": 3
+        },
+        {
+            "Name": "Vex",
+            "Tier": 3
+        },
+
+
+        {
+            "Name": "Aatrox",
+            "Tier": 4
+        },
+        {
+            "Name": "Aurelion Sol",
+            "Tier": 4
+        },
+        {
+            "Name": "Belveth",
+            "Tier": 4
+        },
+        {
+            "Name": "Ekko",
+            "Tier": 4
+        },
+        {
+            "Name": "Garen",
+            "Tier": 4
+        },
+        {
+            "Name": "Jhin",
+            "Tier": 4
+        },
+        {
+            "Name": "Miss Fortune",
+            "Tier": 4
+        },
+        {
+            "Name": "Neeko",
+            "Tier": 4
+        },
+        {
+            "Name": "Samira",
+            "Tier": 4
+        },
+        {
+            "Name": "Twisted Fate",
+            "Tier": 4
+        },
+        {
+            "Name": "Veigo",
+            "Tier": 4
+        },
+        {
+            "Name": "Warwick",
+            "Tier": 4
+        },
+
+
+
+        {
+            "Name": "Fiddlesticks",
+            "Tier": 5
+        },
+        {
+            "Name": "Janna",
+            "Tier": 5
+        },
+        {
+            "Name": "Leona",
+            "Tier": 5
+        },
+        {
+            "Name": "Mordekaiser",
+            "Tier": 5
+        },
+        {
+            "Name": "Nunu",
+            "Tier": 5
+        },
+        {
+            "Name": "Syndra",
+            "Tier": 5
+        },
+        {
+            "Name": "Ultimate Ezreal",
+            "Tier": 5
+        },
+        {
+            "Name": "Urgot",
+            "Tier": 5
+        }
+    ]
+}
