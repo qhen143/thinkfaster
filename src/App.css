@@ -37,7 +37,7 @@
   }
 }
 
-.tier1, .tier2, .tier3, .tier4, .tier5, .tier7, .unit {
+.tier1, .tier2, .tier3, .tier4, .tier5, .tier7, .tier0 {
   background: #333333;
   border: 1px solid #999;
   /* float: left; */

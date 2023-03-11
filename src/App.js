@@ -9,11 +9,11 @@ function Action(props) {
 }
 
 function ShopUnit(props) {
-  return <button className={props.tier} onClick={() => props.onClick()}>{props.champion}</button>
+  return <button className={"tier" + props.tier} onClick={() => props.onClick()}>{props.champion}</button>
 }
 
 function BenchUnit(props) {
-  return <button className={props.tier} onClick={() => props.onClick()}>{props.champion}</button>
+  return <button className={"tier" + props.tier} onClick={() => props.onClick()}>{props.champion}</button>
 }
 
 function Shop(props) {
@@ -42,10 +42,10 @@ function Board() {
 
 
 function Game(props) {
-  const [pool] = useState(props.units);
+  const [pool, setPool] = useState(GenerateUnitPool());
 
-  var initUnits = generateShop(props.shopSize);
-  var initBench = Array(9).fill().map(obj => obj = {uid: uuidv4(), tier: "unit", champion: 0});
+  var initUnits = GenerateShop(props.shopSize);
+  var initBench = Array(9).fill().map(obj => obj = {uid: uuidv4(), tier: 0, champion: 0});
 
   const [bench, setBench] = useState(initBench);
   const [board, setBoard] = useState([[]]);
@@ -74,6 +74,62 @@ function Game(props) {
     };
   }, []);
 
+  function GetNumberOfCopies(tier) {
+    switch(tier) {
+      case 1:
+        return 29;
+      case 2:
+        return 22;
+      case 3:
+        return 18;
+      case 4:
+        return 12;
+      case 5:
+        return 10;
+      default:
+        return 0;
+    }
+  }
+
+  function Shuffle(array) {
+    let currentIndex = array.length,  randomIndex;
+  
+    // While there remain elements to shuffle.
+    while (currentIndex != 0) {
+  
+      // Pick a remaining element.
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+  
+      // And swap it with the current element.
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex], array[currentIndex]];
+    }
+  
+    return array;
+  }
+
+  function GenerateUnitPool() {
+    // TODO dont hard code tiers.
+    var unitsByTier = {
+      1: [],
+      2: [],
+      3: [],
+      4: [],
+      5: []
+    };
+    data.units.forEach(element => {
+      var tier = element.Tier;
+      let numDuplicates = GetNumberOfCopies(tier);
+      for (var i = 0; i < numDuplicates; i++) {
+        var copy = {...element};
+        copy.uid = uuidv4();
+        unitsByTier[tier].push(copy);
+      }
+    }); 
+    return unitsByTier;
+  }
+  
   function FindIndexOfFirstEmptyBenchSlot() {
     for (var i = 0; i < bench.length; i++) {
       if (bench[i].champion === 0) { // TODO: use something more menaingful
@@ -94,7 +150,7 @@ function Game(props) {
     }
 
     // Add to bench
-    var newBench = bench.slice();
+    var newBench = [...bench];
     newBench[i] = { uid: uid, tier: unit.tier, champion: unit.champion };
     setBench(newBench);
 
@@ -102,7 +158,7 @@ function Game(props) {
     var newShop = shop.map(obj => obj.uid === uid ? 
       {
         uid: uuidv4(),
-        tier: "unit",
+        tier: 0,
         champion: 0
       } : obj);
     setShop(newShop);
@@ -122,10 +178,16 @@ function Game(props) {
     var newBench = bench.map(obj => obj.uid === uid ? 
       {
         uid: uuidv4(),
-        tier: "unit",
+        tier: 0,
         champion: 0
       } : obj);
     setBench(newBench);
+
+    // Add back to the unit pool
+    var newPool = {...pool};
+    newPool[unit.tier].push(unit);
+    setPool(newPool);
+    console.log(pool);
   }
 
   function RollTier(level) {
@@ -200,30 +262,44 @@ function Game(props) {
     }
   }
 
-  function generateShop(shopSize) {
+  function GenerateShop(shopSize) {
     let newUnits = [];
+    var newPool = {...pool};
+
     for (let i = 0; i < shopSize; i++) {
 
       // TODO : error handle empty shop for all relevant tiers. e.g. return dead unit.
+      // TODO FIX: THIS IS OVERWRITING THE RETURN TO POOL
       let tier = RollTier(9);
-      let tierString = "tier" + tier;
-      console.log(tier);
-      console.log(pool);
-      let champion = pool[tier].pop();
+      Shuffle(newPool[tier]);
+      let champion = newPool[tier].pop();
 
       // TODO error handle tier pool e.g. roll for another tier.
       
       newUnits[i] = {
         uid: uuidv4(),
-        tier: tierString,
+        tier: tier,
         champion: champion.Name
       }
     }
     return newUnits;
   };
 
+  function ReturnShopUnitsBackToPool() {
+    var newPool = {...pool};
+    shop.forEach((element) => {
+      // Add old unit back to pool
+      var oldUnit = element;
+      newPool[oldUnit.tier].push(oldUnit);
+      setPool(newPool);
+    })
+  }
+
   function refreshShop(shopSize) {
-    setShop(generateShop(shopSize));
+    var newShop = GenerateShop(shopSize);
+    ReturnShopUnitsBackToPool();
+    setShop(newShop);
+    console.log(pool);
   };
 
   return (
@@ -253,45 +329,6 @@ function Game(props) {
 
 function App() {
 
-  function GetNumberOfCopies(tier) {
-    switch(tier) {
-      case 1:
-        return 29;
-      case 2:
-        return 22;
-      case 3:
-        return 18;
-      case 4:
-        return 12;
-      case 5:
-        return 10;
-      default:
-        return 0;
-    }
-  }
-
-  function GenerateUnitPool() {
-    // TODO dont hard code tiers.
-    var unitsByTier = {
-      1: [],
-      2: [],
-      3: [],
-      4: [],
-      5: []
-    };
-    data.units.forEach(element => {
-      var tier = element.Tier;
-      let numDuplicates = GetNumberOfCopies(tier);
-      for (var i = 0; i < numDuplicates; i++) {
-        var copy = {...element};
-        copy.uid = uuidv4();
-        console.log(tier);
-        unitsByTier[tier].push(copy);
-      }
-    }); 
-    return unitsByTier;
-  }
-
   return (
     <div className="App">
       <header className="App-header">
@@ -300,7 +337,7 @@ function App() {
           Edit <code>src/App.js</code> and save to reload.
         </p>
         <p></p>
-        <Game value="1" shopSize="5" units={GenerateUnitPool()} />
+        <Game value="1" shopSize="5"/>
         <a
           className="App-link"
           href="https://reactjs.org"
