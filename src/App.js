@@ -226,7 +226,6 @@ function Game(props) {
 
   function GenerateShop(shopSize) {
     let newUnits = [];
-    let newPool = new Map(pool.current);
 
     for (let i = 0; i < shopSize; i++) {
 
@@ -234,13 +233,11 @@ function Game(props) {
       // TODO FIX: THIS IS OVERWRITING THE RETURN TO POOL
       let tier = RollTier(1);
 
-      var newTierPool = newPool.get(tier).filter(x => x.copies > 0);
+      var newTierPool = pool.current.get(tier).filter(x => x.copies > 0);
       Shuffle(newTierPool);
       // // // TODO error handle tier pool e.g. roll for another tier.
-      let champion = {...newTierPool[0]};
+      var champion = newTierPool[0];
       champion.copies--;
-      newTierPool[0] = champion;
-      newPool.set(tier, newTierPool); // Assign tier pool to ref of new array
       
       newUnits[i] = {
         uid: uuidv4(),
@@ -248,7 +245,7 @@ function Game(props) {
         champion: champion.Name
       }
     }
-    pool.current = newPool; // this is causing infinite renders. !!!!
+
     return newUnits;
   };
 
@@ -274,7 +271,7 @@ function Game(props) {
     setShop(newShop);
   };
 
-  console.log(pool.current.get(1).map(a => a.Name+a.copies).sort());
+  // console.log(pool.current.get(1).map(a => a.Name+a.copies).sort());
 
 
   return (
@@ -322,22 +319,15 @@ function App() {
   }
 
   function GenerateUnitPool() {
-    var unitsByTier = new Map();
+    
+    var pool = new Map();
 
-    data.units.forEach(element => {
-      var tier = element.Tier;
-      if (!unitsByTier.has(tier)) {
-        unitsByTier.set(tier, []);
-      }
+    var hardcodedTiers = [1, 2, 3, 4, 5];
+    hardcodedTiers.forEach(tier => pool.set(tier, data.units.filter(unit => unit.Tier === tier).map(unit => ({...unit, copies: GetNumberOfCopies(tier)}))));
 
-      let numDuplicates = GetNumberOfCopies(tier);
-      var copy = {...element, copies: numDuplicates};
-      copy.uid = uuidv4(); // TODO FIX
-      unitsByTier.set(tier, unitsByTier.get(tier).concat(copy));
-    }); 
-
-    return unitsByTier;
+    return pool;
   }
+
   return (
     <div className="App">
       <header className="App-header">
