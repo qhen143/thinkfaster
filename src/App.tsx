@@ -44,25 +44,6 @@ function BenchUnit(props: ChampionProp) {
   return <button className={"tier" + props.tier} onClick={() => props.onClick()}>{props.champion}</button>
 }
 
-//obsolete?
-function Shop(props: {units: Array<Unit>}) {
-  return (
-    <div className="shop">
-      {(props.units)?.map((unit: Unit, i : number) => <ShopUnit key={i} tier={unit.Tier} champion={unit.Name} onClick={() => {}}/>)}
-    </div>
-  )
-}
-
-function Unit(props : {value: string}) {
-  <button>{props.value}</button>
-}
-
-function Bench() {
-  return (
-    <div></div>
-  )
-}
-
 function Board() {
   return (
     <div></div>
@@ -116,7 +97,7 @@ function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: numbe
   }, []);
   
   function FindIndexOfFirstEmptyBenchSlot() {
-    for (var i = 0; i < bench.length; i++) {
+    for (let i = 0; i < bench.length; i++) {
       if (bench[i].Name === "0") { // TODO: use something more menaingful
         return i;
       }
@@ -127,7 +108,7 @@ function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: numbe
   }
 
   function Buy(unit: Unit, uid: string) {
-    var i = FindIndexOfFirstEmptyBenchSlot();
+    const i = FindIndexOfFirstEmptyBenchSlot();
     
     // Bench is full
     if (i === -1) {
@@ -135,12 +116,12 @@ function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: numbe
     }
 
     // Add to bench
-    var newBench = [...bench];
+    const newBench = [...bench];
     newBench[i] = { ...unit };
     setBench(newBench);
 
     // Remove from Shop
-    var newShop = shop.map(obj => obj.UID === uid ? 
+    const newShop = shop.map(obj => obj.UID === uid ? 
       {...defaultUnit, UID: uuidv4()} : obj);
     setShop(newShop);
   }
@@ -244,8 +225,8 @@ function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: numbe
 
     for (let i = 0; i < shopSize; i++) {
 
-      var tier = RollTier(1);
-      var units = [...pool.current.get(tier)?.values() ?? []].filter(x => x.Copies > 0);
+      let tier = RollTier(1);
+      let units = [...pool.current.get(tier)?.values() ?? []].filter(x => x.Copies > 0);
       
       // No units available
       while (units === undefined || units.length === 0) {
@@ -285,7 +266,7 @@ function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: numbe
   }
 
   function refreshShop(shopSize: number) {
-    var newShop = GenerateShop(shopSize);
+    const newShop = GenerateShop(shopSize);
     ReturnShopUnitsBackToPool();
     setShop(newShop);
 
@@ -342,9 +323,9 @@ function App() {
   function GenerateUnitPool() {
     
     // Create Map (by Tier) of Map (by Unit)
-    var pool = new Map();
+    const pool = new Map();
 
-    var tiers = new Set(data.units.map(x => x.Tier));
+    const tiers = new Set(data.units.map(x => x.Tier));
     tiers.forEach(tier => {
       let units = data.units.filter(unit => unit.Tier === tier).map(unit => ({...unit, Copies: GetNumberOfCopies(tier)})); // Eventually stored in DB
       pool.set(tier, new Map(units.map(x => [x.Id, x])));
