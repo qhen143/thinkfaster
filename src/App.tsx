@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, StrictMode, KeyboardEvent } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import data from "./set8-5.json"
 import React from 'react';
+import { match } from 'assert';
 
 declare global {
   interface WindowEventMap {
@@ -23,7 +24,8 @@ interface PoolUnit extends BaseUnit {
 }
 
 interface Unit extends BaseUnit {
-  UID: string
+  UID: string,
+  StarLevel: number
 }
 
 type ChampionProp = {
@@ -50,7 +52,7 @@ function Board() {
   )
 }
 
-const defaultUnit = {Id: 0, Tier: 0, Name: "0"};
+const defaultUnit = {Id: 0, Tier: 0, Name: "0", StarLevel: 0};
 
 function emptyArray(size: number) {
   return Array(size).fill(defaultUnit).map(obj => ({...obj, UID: uuidv4()}));  
@@ -64,12 +66,16 @@ function initEmptyBench() {
   return emptyArray(9);
 };
 
+function initEmptyBoard() {
+  return emptyArray(4*7); //4 rows 7 cols
+}
+
 function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: number}) {
   const pool = useRef(props.pool);
 
-  const [bench, setBench] = useState(initEmptyBench);
-  const [board, setBoard] = useState([[]]);
-  const [shop, setShop] = useState(initEmptyShop);
+  const [bench, setBench] = useState<Array<Unit>>(initEmptyBench);
+  const [board, setBoard] = useState<Array<Unit>>(initEmptyBoard);
+  const [shop, setShop] = useState<Array<Unit>>(initEmptyShop);
 
   const [eKeyHeld, setEKeyHeld] = useState(false);
 
@@ -108,17 +114,58 @@ function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: numbe
   }
 
   function Buy(unit: Unit, uid: string) {
-    const i = FindIndexOfFirstEmptyBenchSlot();
-    
-    // Bench is full
-    if (i === -1) {
-      return;
-    }
+    let newBench = [...bench];
+    let newBoard = [...board];
+    // TODO use function
+    // Get all matching units on board and bench.
+    const matchesOnBoard = newBoard.reduce((array: Array<number>, x: Unit, index: number) => {
+      if (x.Id === unit.Id && x.StarLevel === 1) {
+        array.push(index);
+      }
+      return array;
+    }, [])
+    const matchesOnBench = newBench.reduce((array: Array<number>, x: Unit, index: number) => {
+      if (x.Id === unit.Id && x.StarLevel === 1) {
+        array.push(index);
+      }
+      return array;
+    }, [])
 
-    // Add to bench
-    const newBench = [...bench];
-    newBench[i] = { ...unit };
-    setBench(newBench);
+    // TODO recursive function?
+    // Combine unit logic
+    if ((matchesOnBoard.length + matchesOnBench.length) === 2) {
+      const index = matchesOnBoard.length > 0 ? 
+      matchesOnBoard[0] : 
+      FindIndexOfFirstEmptyBenchSlot();
+
+      // Remove from board and bench
+      matchesOnBoard.forEach(i => newBoard[i] = {...defaultUnit, UID: uuidv4()});
+      matchesOnBench.forEach(i => newBench[i] = {...defaultUnit, UID: uuidv4()});
+
+      // Upgrade unit
+      if (matchesOnBoard.length > 0) {
+        newBoard[index] = {...unit, StarLevel: unit.StarLevel++};
+      } else {
+        newBench[index] = {...unit, StarLevel: unit.StarLevel++};
+      }
+
+      // Set for 2 star logic? prob not
+      setBoard(newBoard);
+      setBench(newBench);
+
+      // TODO upgrade for next star level.
+    } else {
+      const i = FindIndexOfFirstEmptyBenchSlot();
+    
+      // Bench is full
+      if (i === -1) {
+        return;
+      }
+  
+      // Add to bench
+      newBench[i] = { ...unit };
+      setBench(newBench); //TODO move out of this block?
+    }
 
     // Remove from Shop
     const newShop = shop.map(obj => obj.UID === uid ? 
@@ -127,7 +174,6 @@ function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: numbe
   }
 
   function Sell(unit: Unit, uid : string) {
-
     if (!eKeyHeld) {
       return;
     }
@@ -144,7 +190,7 @@ function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: numbe
     // Add back to the unit pool
     const unitInPool = pool.current.get(unit.Tier)?.get(unit.Id);
     if (unitInPool !== undefined)
-      unitInPool.Copies++;
+      unitInPool.Copies = unitInPool.Copies + Math.pow(3, unit.StarLevel - 1); // assumption: star level never less than 1. 1/3/9 copies returned based on star level.
   }
 
   function RollTier(level: number) {
@@ -242,7 +288,8 @@ function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: numbe
             UID: uuidv4(),
             Id: unit.Id,
             Tier: tier,
-            Name: unit.Name
+            Name: unit.Name,
+            StarLevel: 1
           })
           unit.Copies--;
           return true;
