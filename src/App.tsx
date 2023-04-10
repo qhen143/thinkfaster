@@ -34,6 +34,12 @@ type ChampionProp = {
   onClick: () => void
 }
 
+enum SupportedKeys {
+  E,
+  D,
+  R
+}
+
 function Action(props: {text: string, onClick: () => void}) {
   return <button className="halfSquare" onClick={() => props.onClick()}>{props.text}</button>
 }
@@ -52,10 +58,12 @@ function Board() {
   )
 }
 
-const defaultUnit = {Id: 0, Tier: 0, Name: "0", StarLevel: 0};
+function GenerateEmptyUnit(): Unit {
+  return {Id: 0, Tier: 0, Name: "0", StarLevel: 0, UID: uuidv4()};
+}
 
 function emptyArray(size: number) {
-  return Array(size).fill(defaultUnit).map(obj => ({...obj, UID: uuidv4()}));  
+  return Array(size).fill(GenerateEmptyUnit()).map(obj => ({...obj, UID: uuidv4()}));  
 }
 
 function initEmptyShop() {
@@ -79,18 +87,35 @@ function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: numbe
 
   const [eKeyHeld, setEKeyHeld] = useState(false);
 
-  function downHandler(event: KeyboardEvent<HTMLInputElement>) {
+  function downHandler(event: KeyboardEvent<HTMLInputElement>): void {
     const {key} = event;
     if (key === 'e') {
       setEKeyHeld(true);
     }
   }
 
-  function upHandler(event: KeyboardEvent<HTMLInputElement>) {
+  function upHandler(event: KeyboardEvent<HTMLInputElement>): void {
     const {key} = event;
     if (key === 'e') {
       setEKeyHeld(false);
     }
+  }
+
+  function IsKeyHeld(key: SupportedKeys): boolean {
+    switch (key) {
+      case SupportedKeys.E:
+        return eKeyHeld;
+        break;
+      case SupportedKeys.D:
+        // TODO
+        break;
+      case SupportedKeys.R:
+        // TODO
+        break;
+      default:
+        return false;
+    }
+    return false;
   }
 
   useEffect(() => {
@@ -102,11 +127,11 @@ function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: numbe
     };
   }, []);
   
-  function FindFirstEmptySlot(array: Array<Unit>) {
+  function FindFirstEmptySlot(array: Array<Unit>): number {
     return array.findIndex(x => x.Id === 0);
   }
 
-  function FindAllMatchingUnits(array: Array<Unit>, unit: Unit) {
+  function FindAllMatchingUnits(array: Array<Unit>, unit: Unit): Array<number> {
     return array.reduce((array: Array<number>, x: Unit, index: number) => {
       if (x.Id === unit.Id && x.StarLevel === unit.StarLevel) {
         array.push(index);
@@ -128,8 +153,8 @@ function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: numbe
     }
 
     // Remove from board and bench
-    matchesOnBoard.forEach(i => state.board[i] = {...defaultUnit, UID: uuidv4()});
-    matchesOnBench.forEach(i => state.bench[i] = {...defaultUnit, UID: uuidv4()});
+    matchesOnBoard.forEach(i => state.board[i] = GenerateEmptyUnit());
+    matchesOnBench.forEach(i => state.bench[i] = GenerateEmptyUnit());
 
     // Upgrade unit
     var upgradedUnit = {...unit};
@@ -144,7 +169,7 @@ function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: numbe
     return CombineUnits(state, upgradedUnit);
   }
 
-  function Buy(unit: Unit) {
+  function Buy(unit: Unit, bench: Array<Unit>, board: Array<Unit>): void {
     let newBench = [...bench];
     let newBoard = [...board];
 
@@ -168,12 +193,12 @@ function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: numbe
 
     // Remove from Shop
     const newShop = shop.map(obj => obj.UID === unit.UID ? 
-      {...defaultUnit, UID: uuidv4()} : obj);
+      GenerateEmptyUnit() : obj);
     setShop(newShop);
   }
 
-  function Sell(unit: Unit) {
-    if (!eKeyHeld) {
+  function Sell(unit: Unit, pool: Map<number, Map<number, PoolUnit>>): void {
+    if (!IsKeyHeld(SupportedKeys.E)) {
       return;
     }
 
@@ -182,19 +207,18 @@ function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: numbe
     }
 
     // Remove from Bench
-    var newBench = bench.map(obj => obj.UID === unit.UID ? 
-      {...defaultUnit, UID: uuidv4()} : obj);
+    var newBench = bench.map(obj => obj.UID === unit.UID ? GenerateEmptyUnit() : obj); // TODO global var     //TODO implement board
     setBench(newBench);
 
     // Add back to the unit pool
-    const unitInPool = pool.current.get(unit.Tier)?.get(unit.Id);
+    const unitInPool = pool.get(unit.Tier)?.get(unit.Id);
     if (unitInPool !== undefined)
       // Assumption: star level never less than 1. 1/3/9 copies returned based on star level.
       unitInPool.Copies = unitInPool.Copies + Math.pow(3, unit.StarLevel - 1); 
   }
 
-  function RollTier(level: number) {
-    var odds = Math.random();
+  // TODO magic number
+  function RollTier(level: number, odds: number): number {
     // TODO Get from DB/ make odds an object.
     switch(level) {
       case 3:
@@ -265,59 +289,73 @@ function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: numbe
     }
   }
 
-  function GenerateShop(shopSize: number) {
+  function GetAvailableUnits(array: Array<PoolUnit>, ignore: Array<number>): Array<PoolUnit> {
+    return array.filter(x => x.Copies > 0 && !ignore.includes(x.Id))
+  }
+
+  function GetRandomUnitFromPool(randomNumber: number, units: Array<PoolUnit>): Unit {
+    let range = units.map(x => x.Copies).reduce((a,b) => a + b);
+    let index = Math.floor(randomNumber * range);
+
+    let unit = GenerateEmptyUnit();
+    // Iterate over units until a unit is selected. 
+    units.some(x => {
+      if (index <= x.Copies) {
+        unit = {
+          UID: uuidv4(),
+          Id: x.Id,
+          Tier: x.Tier,
+          Name: x.Name,
+          StarLevel: 1
+        };
+        x.Copies--;
+        return true;
+      }
+
+      index = index - x.Copies;
+      return false;
+    });
+
+    return unit;
+  }
+
+  function GenerateShop(shopSize: number, pool: Map<number, Map<number, PoolUnit>>): Array<Unit> {
 
     let newUnits: Array<Unit> = [];
+    let completedUnitIds = board.concat(bench).filter(x => x.StarLevel >= 3).map(y => y.Id); // TODO magic number
 
     for (let i = 0; i < shopSize; i++) {
 
-      let tier = RollTier(1);
-      let units = [...pool.current.get(tier)?.values() ?? []].filter(x => x.Copies > 0);
-      
-      // No units available
-      while (units === undefined || units.length === 0) {
-        tier = RollTier(1) // TODO implement level
-        units = [...pool.current.get(tier)?.values() ?? []].filter(x => x.Copies > 0);
+      // Check pool has no relevant copies of units left.
+      if ([...pool.values()].every(x => GetAvailableUnits([...x.values()], completedUnitIds).length === 0)) {
+        newUnits.push(GenerateEmptyUnit());
+        continue;
       }
 
-      // TODO Move to fn
-      let rn = Math.floor(Math.random() * units.map(x => x.Copies).reduce((a,b) => a + b));
-      units.some(unit => {
-        if (rn <= unit.Copies) {
-          newUnits.push({
-            UID: uuidv4(),
-            Id: unit.Id,
-            Tier: tier,
-            Name: unit.Name,
-            StarLevel: 1
-          })
-          unit.Copies--;
-          return true;
-        }
+      let units;
+      // Re-roll until there are units.
+      while (units === undefined || units.length === 0) {
+        const tier = RollTier(1, Math.random()) // TODO implement level
+        units = GetAvailableUnits([...pool.get(tier)?.values() ?? []], completedUnitIds);
+      }
 
-        rn = rn - unit.Copies;
-        return false;
-      });
+      newUnits.push(GetRandomUnitFromPool(Math.random(), units));
     }
 
     return newUnits;
   };
 
-  function ReturnShopUnitsBackToPool() {
+  function ReturnShopUnitsBackToPool(shop: Array<Unit>, pool: Map<number, Map<number, PoolUnit>>): void {
     shop.filter(x => x.Tier !== 0).forEach((element) => {
-      // Add back to the unit pool
-      const unitInPool = pool.current.get(element.Tier)?.get(element.Id);
+      const unitInPool = pool.get(element.Tier)?.get(element.Id);
       if (unitInPool !== undefined)
         unitInPool.Copies++;
       })
   }
 
-  function refreshShop(shopSize: number) {
-    const newShop = GenerateShop(shopSize);
-    ReturnShopUnitsBackToPool();
-    setShop(newShop);
-
-    return newShop;
+  function refreshShop(shopSize: number): void {
+    ReturnShopUnitsBackToPool(shop, pool.current);
+    setShop(GenerateShop(shopSize, pool.current));
   };
 
   console.log([...pool.current.get(1)?.values() ?? []].map(a => a.Copies + a.Name).sort());
@@ -330,7 +368,7 @@ function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: numbe
       {/* Bench  */}      
       <div className="row">
         <div className='shop'>
-          {(bench)?.map((object) => { return <BenchUnit key={object.UID} tier={object.Tier} champion={object.Name} starLevel={object.StarLevel.toString()} onClick={() => Sell(object)}/> })}
+          {(bench)?.map((object) => { return <BenchUnit key={object.UID} tier={object.Tier} champion={object.Name} starLevel={object.StarLevel.toString()} onClick={() => Sell(object, pool.current)}/> })}
         </div>
       </div>
 
@@ -341,7 +379,7 @@ function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: numbe
           <Action text="Refresh (2g)" onClick={() => refreshShop(props.shopSize)}/>
         </div>
         <div className="shop">
-          {(shop)?.map((object) => <ShopUnit key={object.UID} tier={object.Tier} champion={object.Name}  starLevel={object.StarLevel.toString()} onClick={() => Buy(object)}/>)}
+          {(shop)?.map((object) => <ShopUnit key={object.UID} tier={object.Tier} champion={object.Name}  starLevel={object.StarLevel.toString()} onClick={() => Buy(object, bench, board)}/>)}
         </div>    
       </div>
     </div>
