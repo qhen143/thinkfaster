@@ -1,70 +1,22 @@
-# Getting Started with Create React App
+# Background
+## What is TFT?
+TFT stands for Teamfight Tactics, which is a popular auto battler game mode within the video game League of Legends. In TFT, players assemble a team of champions and strategically position them on a board to battle against other players' teams. Each round, players earn gold, which they can use to purchase new champions or level up their existing ones. The game also features different item combinations and synergies that can greatly enhance a player's team. The goal of TFT is to be the last player standing by winning battles and eliminating opponents.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+https://teamfighttactics.leagueoflegends.com/
 
-## Available Scripts
+## What is Think Fast?
+In TFT, combining units is a key strategy in TFT that allows players to upgrade their champions and gain an advantage in combat.
+Combining units involves merging two or three identical units to create a more powerful version of that unit with a higher star level. This can be done by purchasing multiple copies of the same unit from the shop. The player can spend gold to refresh the shop in hopes of getting the desired champion(s).
 
-In the project directory, you can run:
+In TFT, augments are gameplay modifiers that can be used to add variety to the game. Think Fast is an augment that does the following:
+_"Shop refreshes are free until the end of this round. Traits and other augments do not benefit from these free shops."_
 
-### `npm start`
+In other words, Think Fast allows the player improve their team's strength by bypassing their economy restrictions, provided that they have the mechanical skill to perform all the requried actions in the given timeframe.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+# So what is thinkfaster?
+The chance of getting this specific augment is rare so many player do not get to practice this skill often. Personally, I have only picked this augment once in 100+ games.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+thinkfaster is an overly simplified imitation of the user interface and Think Fast augment from TFT. After an embarrissing display of skill when picking this augment, I decided to create this application to give players an environment to practice this rare scenario.
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## TL;DR
+I want to be able to do this: https://www.youtube.com/watch?v=q3MEeuNZHII
