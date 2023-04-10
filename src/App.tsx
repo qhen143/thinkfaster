@@ -268,16 +268,17 @@ function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: numbe
   function GenerateShop(shopSize: number) {
 
     let newUnits: Array<Unit> = [];
+    let completedUnitIds = board.concat(bench).filter(x => x.StarLevel >= 3).map(y => y.Id);
 
     for (let i = 0; i < shopSize; i++) {
 
       let tier = RollTier(1);
-      let units = [...pool.current.get(tier)?.values() ?? []].filter(x => x.Copies > 0);
+      let units = [...pool.current.get(tier)?.values() ?? []].filter(x => x.Copies > 0 && !completedUnitIds.includes(x.Id));
       
       // No units available
       while (units === undefined || units.length === 0) {
         tier = RollTier(1) // TODO implement level
-        units = [...pool.current.get(tier)?.values() ?? []].filter(x => x.Copies > 0);
+        units = [...pool.current.get(tier)?.values() ?? []].filter(x => x.Copies > 0 && !completedUnitIds.includes(x.Id));
       }
 
       // TODO Move to fn
