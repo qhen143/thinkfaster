@@ -4,7 +4,6 @@ import { useState, useEffect, useRef, StrictMode, KeyboardEvent } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import data from "./set8-5.json"
 import React from 'react';
-import { match } from 'assert';
 
 declare global {
   interface WindowEventMap {
@@ -31,6 +30,7 @@ interface Unit extends BaseUnit {
 type ChampionProp = {
   tier: number,
   champion: string,
+  starLevel: string,
   onClick: () => void
 }
 
@@ -43,7 +43,7 @@ function ShopUnit(props: ChampionProp) {
 }
 
 function BenchUnit(props: ChampionProp) {
-  return <button className={"tier" + props.tier} onClick={() => props.onClick()}>{props.champion}</button>
+  return <button className={"tier" + props.tier} onClick={() => props.onClick()}>{props.champion + props.starLevel}</button>
 }
 
 function Board() {
@@ -102,15 +102,8 @@ function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: numbe
     };
   }, []);
   
-  function FindIndexOfFirstEmptyBenchSlot() {
-    for (let i = 0; i < bench.length; i++) {
-      if (bench[i].Name === "0") { // TODO: use something more menaingful
-        return i;
-      }
-    }
-
-    // Bench is full
-    return -1;
+  function FindFirstEmptySlot(array: Array<Unit>) {
+    return array.findIndex(x => x.Id === 0);
   }
 
   function FindAllMatchingUnits(array: Array<Unit>, unit: Unit) {
@@ -127,21 +120,24 @@ function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: numbe
     const matchesOnBoard = FindAllMatchingUnits(state.board, unit);
     const matchesOnBench = FindAllMatchingUnits(state.bench, unit);
 
-    // Combine 3 units together: One bought from the shop, the other two from the borad or bench.
-    if ((matchesOnBoard.length + matchesOnBench.length) !== 2) {
+    // 1-Star --> 2 Star: Combine one bought from the shop, the other two from the board or bench.
+    // 2-Star --> 3 Star: Combine three units from the bench.
+    // 3-Star+ // TODO
+    if ((matchesOnBoard.length + matchesOnBench.length) !== unit.StarLevel + 1) {
       return state;
     }
 
     // Remove from board and bench
-    matchesOnBoard.forEach(i => board[i] = {...defaultUnit, UID: uuidv4()});
-    matchesOnBench.forEach(i => bench[i] = {...defaultUnit, UID: uuidv4()});
+    matchesOnBoard.forEach(i => state.board[i] = {...defaultUnit, UID: uuidv4()});
+    matchesOnBench.forEach(i => state.bench[i] = {...defaultUnit, UID: uuidv4()});
 
     // Upgrade unit
-    var upgradedUnit = {...unit, StarLevel: unit.StarLevel++};
+    var upgradedUnit = {...unit};
+    upgradedUnit.StarLevel++;
     if (matchesOnBoard.length > 0) {
       state.board[matchesOnBoard[0]] = upgradedUnit;
     } else {
-      state.bench[FindIndexOfFirstEmptyBenchSlot()] = upgradedUnit;
+      state.bench[FindFirstEmptySlot(state.bench)] = upgradedUnit;
     }
     state.hasCombined = true;
 
@@ -152,19 +148,13 @@ function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: numbe
     let newBench = [...bench];
     let newBoard = [...board];
 
-    // Get all matching units on board and bench.
-    const matchesOnBoard = FindAllMatchingUnits(newBoard, unit);
-    const matchesOnBench = FindAllMatchingUnits(newBench, unit);
-
     const state = CombineUnits({ board: newBoard, bench: newBench, hasCombined: false}, unit)
-    // Combine unit logic
     if (state.hasCombined) {
 
-      // Set for 2 star logic? prob not
       setBoard(state.board);
       setBench(state.bench);
     } else {
-      const i = FindIndexOfFirstEmptyBenchSlot();
+      const i = FindFirstEmptySlot(newBench);
     
       // Bench is full
       if (i === -1) {
@@ -173,7 +163,7 @@ function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: numbe
   
       // Add to bench
       newBench[i] = { ...unit };
-      setBench(newBench); //TODO move out of this block?
+      setBench(newBench);
     }
 
     // Remove from Shop
@@ -340,7 +330,7 @@ function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: numbe
       {/* Bench  */}      
       <div className="row">
         <div className='shop'>
-          {(bench)?.map((object) => { return <BenchUnit key={object.UID} tier={object.Tier} champion={object.Name} onClick={() => Sell(object)}/> })}
+          {(bench)?.map((object) => { return <BenchUnit key={object.UID} tier={object.Tier} champion={object.Name} starLevel={object.StarLevel.toString()} onClick={() => Sell(object)}/> })}
         </div>
       </div>
 
@@ -351,7 +341,7 @@ function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: numbe
           <Action text="Refresh (2g)" onClick={() => refreshShop(props.shopSize)}/>
         </div>
         <div className="shop">
-          {(shop)?.map((object) => <ShopUnit key={object.UID} tier={object.Tier} champion={object.Name} onClick={() => Buy(object)}/>)}
+          {(shop)?.map((object) => <ShopUnit key={object.UID} tier={object.Tier} champion={object.Name}  starLevel={object.StarLevel.toString()} onClick={() => Buy(object)}/>)}
         </div>    
       </div>
     </div>
