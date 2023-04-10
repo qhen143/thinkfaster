@@ -23,12 +23,14 @@ interface PoolUnit extends BaseUnit {
 }
 
 interface Unit extends BaseUnit {
-  UID: string
+  UID: string,
+  StarLevel: number
 }
 
 type ChampionProp = {
   tier: number,
   champion: string,
+  starLevel: string,
   onClick: () => void
 }
 
@@ -41,7 +43,7 @@ function ShopUnit(props: ChampionProp) {
 }
 
 function BenchUnit(props: ChampionProp) {
-  return <button className={"tier" + props.tier} onClick={() => props.onClick()}>{props.champion}</button>
+  return <button className={"tier" + props.tier} onClick={() => props.onClick()}>{props.champion + props.starLevel}</button>
 }
 
 function Board() {
@@ -50,7 +52,7 @@ function Board() {
   )
 }
 
-const defaultUnit = {Id: 0, Tier: 0, Name: "0"};
+const defaultUnit = {Id: 0, Tier: 0, Name: "0", StarLevel: 0};
 
 function emptyArray(size: number) {
   return Array(size).fill(defaultUnit).map(obj => ({...obj, UID: uuidv4()}));  
@@ -64,12 +66,16 @@ function initEmptyBench() {
   return emptyArray(9);
 };
 
+function initEmptyBoard() {
+  return emptyArray(4*7); //4 rows 7 cols
+}
+
 function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: number}) {
   const pool = useRef(props.pool);
 
-  const [bench, setBench] = useState(initEmptyBench);
-  const [board, setBoard] = useState([[]]);
-  const [shop, setShop] = useState(initEmptyShop);
+  const [bench, setBench] = useState<Array<Unit>>(initEmptyBench);
+  const [board, setBoard] = useState<Array<Unit>>(initEmptyBoard);
+  const [shop, setShop] = useState<Array<Unit>>(initEmptyShop);
 
   const [eKeyHeld, setEKeyHeld] = useState(false);
 
@@ -96,38 +102,77 @@ function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: numbe
     };
   }, []);
   
-  function FindIndexOfFirstEmptyBenchSlot() {
-    for (let i = 0; i < bench.length; i++) {
-      if (bench[i].Name === "0") { // TODO: use something more menaingful
-        return i;
-      }
-    }
-
-    // Bench is full
-    return -1;
+  function FindFirstEmptySlot(array: Array<Unit>) {
+    return array.findIndex(x => x.Id === 0);
   }
 
-  function Buy(unit: Unit, uid: string) {
-    const i = FindIndexOfFirstEmptyBenchSlot();
-    
-    // Bench is full
-    if (i === -1) {
-      return;
+  function FindAllMatchingUnits(array: Array<Unit>, unit: Unit) {
+    return array.reduce((array: Array<number>, x: Unit, index: number) => {
+      if (x.Id === unit.Id && x.StarLevel === unit.StarLevel) {
+        array.push(index);
+      }
+      return array;
+    }, [])
+  }
+
+  function CombineUnits(state: {board: Array<Unit>, bench: Array<Unit>, hasCombined: boolean}, unit: Unit): {board: Array<Unit>, bench: Array<Unit> , hasCombined: boolean} {
+    // Get all matching units on board and bench.
+    const matchesOnBoard = FindAllMatchingUnits(state.board, unit);
+    const matchesOnBench = FindAllMatchingUnits(state.bench, unit);
+
+    // 1-Star --> 2 Star: Combine one bought from the shop, the other two from the board or bench.
+    // 2-Star --> 3 Star: Combine three units from the bench.
+    // 3-Star+ // TODO
+    if ((matchesOnBoard.length + matchesOnBench.length) !== unit.StarLevel + 1) {
+      return state;
     }
 
-    // Add to bench
-    const newBench = [...bench];
-    newBench[i] = { ...unit };
-    setBench(newBench);
+    // Remove from board and bench
+    matchesOnBoard.forEach(i => state.board[i] = {...defaultUnit, UID: uuidv4()});
+    matchesOnBench.forEach(i => state.bench[i] = {...defaultUnit, UID: uuidv4()});
+
+    // Upgrade unit
+    var upgradedUnit = {...unit};
+    upgradedUnit.StarLevel++;
+    if (matchesOnBoard.length > 0) {
+      state.board[matchesOnBoard[0]] = upgradedUnit;
+    } else {
+      state.bench[FindFirstEmptySlot(state.bench)] = upgradedUnit;
+    }
+    state.hasCombined = true;
+
+    return CombineUnits(state, upgradedUnit);
+  }
+
+  function Buy(unit: Unit) {
+    let newBench = [...bench];
+    let newBoard = [...board];
+
+    const state = CombineUnits({ board: newBoard, bench: newBench, hasCombined: false}, unit)
+    if (state.hasCombined) {
+
+      setBoard(state.board);
+      setBench(state.bench);
+    } else {
+      const i = FindFirstEmptySlot(newBench);
+    
+      // Bench is full
+      if (i === -1) {
+        return;
+      }
+  
+      // Add to bench
+      newBench[i] = { ...unit };
+      setBench(newBench);
+    }
 
     // Remove from Shop
-    const newShop = shop.map(obj => obj.UID === uid ? 
+    const newShop = shop.map(obj => obj.UID === unit.UID ? 
       {...defaultUnit, UID: uuidv4()} : obj);
     setShop(newShop);
   }
 
-  function Sell(unit: Unit, uid : string) {
-
+  function Sell(unit: Unit) {
     if (!eKeyHeld) {
       return;
     }
@@ -137,14 +182,15 @@ function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: numbe
     }
 
     // Remove from Bench
-    var newBench = bench.map(obj => obj.UID === uid ? 
+    var newBench = bench.map(obj => obj.UID === unit.UID ? 
       {...defaultUnit, UID: uuidv4()} : obj);
     setBench(newBench);
 
     // Add back to the unit pool
     const unitInPool = pool.current.get(unit.Tier)?.get(unit.Id);
     if (unitInPool !== undefined)
-      unitInPool.Copies++;
+      // Assumption: star level never less than 1. 1/3/9 copies returned based on star level.
+      unitInPool.Copies = unitInPool.Copies + Math.pow(3, unit.StarLevel - 1); 
   }
 
   function RollTier(level: number) {
@@ -242,7 +288,8 @@ function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: numbe
             UID: uuidv4(),
             Id: unit.Id,
             Tier: tier,
-            Name: unit.Name
+            Name: unit.Name,
+            StarLevel: 1
           })
           unit.Copies--;
           return true;
@@ -283,7 +330,7 @@ function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: numbe
       {/* Bench  */}      
       <div className="row">
         <div className='shop'>
-          {(bench)?.map((object) => { return <BenchUnit key={object.UID} tier={object.Tier} champion={object.Name} onClick={() => Sell(object, object.UID)}/> })}
+          {(bench)?.map((object) => { return <BenchUnit key={object.UID} tier={object.Tier} champion={object.Name} starLevel={object.StarLevel.toString()} onClick={() => Sell(object)}/> })}
         </div>
       </div>
 
@@ -294,7 +341,7 @@ function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: numbe
           <Action text="Refresh (2g)" onClick={() => refreshShop(props.shopSize)}/>
         </div>
         <div className="shop">
-          {(shop)?.map((object) => <ShopUnit key={object.UID} tier={object.Tier} champion={object.Name} onClick={() => Buy(object, object.UID)}/>)}
+          {(shop)?.map((object) => <ShopUnit key={object.UID} tier={object.Tier} champion={object.Name}  starLevel={object.StarLevel.toString()} onClick={() => Buy(object)}/>)}
         </div>    
       </div>
     </div>
