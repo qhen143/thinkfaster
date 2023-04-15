@@ -59,8 +59,13 @@ function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: numbe
 
   function upHandler(event: KeyboardEvent<HTMLInputElement>): void {
     const {key} = event;
-    if (key === 'e') {
+    if (key === 'e')
       setEKeyHeld(false);
+    
+    if (key === 'd') {
+      refreshShop(props.shopSize);
+    } else if (key === 'f') {
+      // TODO
     }
   }
 
@@ -68,17 +73,9 @@ function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: numbe
     switch (key) {
       case SupportedKeys.E:
         return eKeyHeld;
-        break;
-      case SupportedKeys.D:
-        // TODO
-        break;
-      case SupportedKeys.R:
-        // TODO
-        break;
       default:
         return false;
     }
-    return false;
   }
 
   useEffect(() => {
