@@ -1,0 +1,40 @@
+.tier1, .tier2, .tier3, .tier4, .tier5, .tier7, .tier0 {
+  background: #333333;
+  border: 1px solid #999;
+  /* float: left; */
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 34px;
+  height: 20vh;
+  width: 10vw;
+  /* margin-right: -1px;
+  margin-top: -1px; */
+  padding: 0;
+  text-align: center;
+  /* display: flex;
+  flex-direction: row; */
+}
+
+.tier1 {
+  background: #fff;
+}
+
+.tier2 {
+  background: rgb(34, 218, 147);
+}
+
+.tier3 {
+  background: rgb(0, 217, 255);
+}
+
+.tier4 {
+  background: rgb(234, 0, 255);
+}
+
+.tier5 {
+  background: rgb(255, 217, 0);
+}
+
+.tier7 {
+  background: rgb(255, 4, 4);
+}
