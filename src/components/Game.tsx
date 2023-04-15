@@ -1,9 +1,12 @@
-// import logo from './logo.svg';
-import './App.css';
-import { useState, useEffect, useRef, StrictMode, KeyboardEvent } from 'react';
+import styles from '../../styles/Game.module.css';
+import { useState, useEffect, useRef, KeyboardEvent } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import data from "./set8-5.json"
 import React from 'react';
+import Board from './Board';
+import Bench from './Bench';
+import Shop from './Shop';
+import Actions from './Actions';
+import { Unit, PoolUnit } from '../types/Units'
 
 declare global {
   interface WindowEventMap {
@@ -12,50 +15,10 @@ declare global {
   }
 }
 
-interface BaseUnit {
-  Id: number,
-  Tier: number,
-  Name: string
-}
-
-interface PoolUnit extends BaseUnit {
-  Copies: number
-}
-
-interface Unit extends BaseUnit {
-  UID: string,
-  StarLevel: number
-}
-
-type ChampionProp = {
-  tier: number,
-  champion: string,
-  starLevel: string,
-  onClick: () => void
-}
-
 enum SupportedKeys {
   E,
   D,
   R
-}
-
-function Action(props: {text: string, onClick: () => void}) {
-  return <button className="halfSquare" onClick={() => props.onClick()}>{props.text}</button>
-}
-
-function ShopUnit(props: ChampionProp) {
-  return <button className={"tier" + props.tier} onClick={() => props.onClick()}>{props.champion}</button>
-}
-
-function BenchUnit(props: ChampionProp) {
-  return <button className={"tier" + props.tier} onClick={() => props.onClick()}>{props.champion + props.starLevel}</button>
-}
-
-function Board() {
-  return (
-    <div></div>
-  )
 }
 
 function GenerateEmptyUnit(): Unit {
@@ -81,9 +44,9 @@ function initEmptyBoard() {
 function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: number}) {
   const pool = useRef(props.pool);
 
-  const [bench, setBench] = useState<Array<Unit>>(initEmptyBench);
-  const [board, setBoard] = useState<Array<Unit>>(initEmptyBoard);
-  const [shop, setShop] = useState<Array<Unit>>(initEmptyShop);
+  const [bench, setBench] = useState<Unit[]>(initEmptyBench);
+  const [board, setBoard] = useState<Unit[]>(initEmptyBoard);
+  const [shop, setShop] = useState<Unit[]>(initEmptyShop);
 
   const [eKeyHeld, setEKeyHeld] = useState(false);
 
@@ -127,11 +90,11 @@ function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: numbe
     };
   }, []);
   
-  function FindFirstEmptySlot(array: Array<Unit>): number {
+  function FindFirstEmptySlot(array: Unit[]): number {
     return array.findIndex(x => x.Id === 0);
   }
 
-  function FindAllMatchingUnits(array: Array<Unit>, unit: Unit): Array<number> {
+  function FindAllMatchingUnits(array: Unit[], unit: Unit): Array<number> {
     return array.reduce((array: Array<number>, x: Unit, index: number) => {
       if (x.Id === unit.Id && x.StarLevel === unit.StarLevel) {
         array.push(index);
@@ -140,7 +103,7 @@ function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: numbe
     }, [])
   }
 
-  function CombineUnits(state: {board: Array<Unit>, bench: Array<Unit>, hasCombined: boolean}, unit: Unit): {board: Array<Unit>, bench: Array<Unit> , hasCombined: boolean} {
+  function CombineUnits(state: {board: Unit[], bench: Unit[], hasCombined: boolean}, unit: Unit): {board: Unit[], bench: Unit[] , hasCombined: boolean} {
     // Get all matching units on board and bench.
     const matchesOnBoard = FindAllMatchingUnits(state.board, unit);
     const matchesOnBench = FindAllMatchingUnits(state.bench, unit);
@@ -167,54 +130,6 @@ function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: numbe
     state.hasCombined = true;
 
     return CombineUnits(state, upgradedUnit);
-  }
-
-  function Buy(unit: Unit, bench: Array<Unit>, board: Array<Unit>): void {
-    let newBench = [...bench];
-    let newBoard = [...board];
-
-    const state = CombineUnits({ board: newBoard, bench: newBench, hasCombined: false}, unit)
-    if (state.hasCombined) {
-
-      setBoard(state.board);
-      setBench(state.bench);
-    } else {
-      const i = FindFirstEmptySlot(newBench);
-    
-      // Bench is full
-      if (i === -1) {
-        return;
-      }
-  
-      // Add to bench
-      newBench[i] = { ...unit };
-      setBench(newBench);
-    }
-
-    // Remove from Shop
-    const newShop = shop.map(obj => obj.UID === unit.UID ? 
-      GenerateEmptyUnit() : obj);
-    setShop(newShop);
-  }
-
-  function Sell(unit: Unit, pool: Map<number, Map<number, PoolUnit>>): void {
-    if (!IsKeyHeld(SupportedKeys.E)) {
-      return;
-    }
-
-    if (unit.Name === "0") {
-      return;
-    }
-
-    // Remove from Bench
-    var newBench = bench.map(obj => obj.UID === unit.UID ? GenerateEmptyUnit() : obj); // TODO global var     //TODO implement board
-    setBench(newBench);
-
-    // Add back to the unit pool
-    const unitInPool = pool.get(unit.Tier)?.get(unit.Id);
-    if (unitInPool !== undefined)
-      // Assumption: star level never less than 1. 1/3/9 copies returned based on star level.
-      unitInPool.Copies = unitInPool.Copies + Math.pow(3, unit.StarLevel - 1); 
   }
 
   // TODO magic number
@@ -319,9 +234,9 @@ function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: numbe
     return unit;
   }
 
-  function GenerateShop(shopSize: number, pool: Map<number, Map<number, PoolUnit>>): Array<Unit> {
+  function GenerateShop(shopSize: number, pool: Map<number, Map<number, PoolUnit>>): Unit[] {
 
-    let newUnits: Array<Unit> = [];
+    let newUnits: Unit[] = [];
     let completedUnitIds = board.concat(bench).filter(x => x.StarLevel >= 3).map(y => y.Id); // TODO magic number
 
     for (let i = 0; i < shopSize; i++) {
@@ -345,7 +260,7 @@ function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: numbe
     return newUnits;
   };
 
-  function ReturnShopUnitsBackToPool(shop: Array<Unit>, pool: Map<number, Map<number, PoolUnit>>): void {
+  function ReturnShopUnitsBackToPool(shop: Unit[], pool: Map<number, Map<number, PoolUnit>>): void {
     shop.filter(x => x.Tier !== 0).forEach((element) => {
       const unitInPool = pool.get(element.Tier)?.get(element.Id);
       if (unitInPool !== undefined)
@@ -360,87 +275,74 @@ function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: numbe
 
   console.log([...pool.current.get(1)?.values() ?? []].map(a => a.Copies + a.Name).sort());
 
+  function Sell(unit: Unit, container: Unit[], pool: Map<number, Map<number, PoolUnit>>): void {
+    if (!IsKeyHeld(SupportedKeys.E)) {
+      return;
+    }
+
+    if (unit.Id === 0) {
+      return;
+    }
+
+    // Remove from Bench
+    var newContainer = container.map(obj => obj.UID === unit.UID ? GenerateEmptyUnit() : obj); // TODO global var     //TODO implement board
+    setBench(newContainer);
+
+    // Add back to the unit pool
+    const unitInPool = pool.get(unit.Tier)?.get(unit.Id);
+    if (unitInPool !== undefined)
+      // Assumption: star level never less than 1. 1/3/9 copies returned based on star level.
+      unitInPool.Copies = unitInPool.Copies + Math.pow(3, unit.StarLevel - 1); 
+  }
+
+  function Buy(unit: Unit, shop: Unit[], bench: Unit[], board: Unit[]): void {
+    let newBench = [...bench];
+    let newBoard = [...board];
+
+    const state = CombineUnits({ board: newBoard, bench: newBench, hasCombined: false}, unit)
+    if (state.hasCombined) {
+
+      setBoard(state.board);
+      setBench(state.bench);
+    } else {
+      const i = FindFirstEmptySlot(newBench);
+    
+      // Bench is full
+      if (i === -1) {
+        return;
+      }
+  
+      // Add to bench
+      newBench[i] = { ...unit };
+      setBench(newBench);
+    }
+
+    // Remove from Shop
+    const newShop = shop.map(obj => obj.UID === unit.UID ? GenerateEmptyUnit() : obj);
+    setShop(newShop);
+  }
+
+  let actions = [
+    { id: 1, description: "Buy XP (4g)", onClick: () => {} },
+    { id: 2, description: "Refresh (2g)", onClick: () => refreshShop(props.shopSize) },
+  ]
 
   return (
     <div>
       <Board />
 
       {/* Bench  */}      
-      <div className="row">
-        <div className='shop'>
-          {(bench)?.map((object) => { return <BenchUnit key={object.UID} tier={object.Tier} champion={object.Name} starLevel={object.StarLevel.toString()} onClick={() => Sell(object, pool.current)}/> })}
-        </div>
+      <div className={styles.row} >
+        <Bench units={bench} bench={bench} pool={pool.current} onClick={Sell}/>
       </div>
 
       {/* ActionBar */}
-      <div className="row">
-        <div className="actions">
-          <Action text="Buy XP (4g)" onClick={() => {}}/>
-          <Action text="Refresh (2g)" onClick={() => refreshShop(props.shopSize)}/>
-        </div>
-        <div className="shop">
-          {(shop)?.map((object) => <ShopUnit key={object.UID} tier={object.Tier} champion={object.Name}  starLevel={object.StarLevel.toString()} onClick={() => Buy(object, bench, board)}/>)}
-        </div>    
+      <div className={styles.row}>
+        <Actions actions={actions} />
+        <Shop shop={shop} bench={bench} board={board} onClick={Buy}/> 
       </div>
     </div>
   )
 }
 
-function App() {
-
-  function GetNumberOfCopies(tier: number) {
-    switch(tier) {
-      case 1:
-        return 29;
-      case 2:
-        return 22;
-      case 3:
-        return 18;
-      case 4:
-        return 12;
-      case 5:
-        return 10;
-      default:
-        return 0;
-    }
-  }
-
-  function GenerateUnitPool() {
-    
-    // Create Map (by Tier) of Map (by Unit)
-    const pool = new Map();
-
-    const tiers = new Set(data.units.map(x => x.Tier));
-    tiers.forEach(tier => {
-      let units = data.units.filter(unit => unit.Tier === tier).map(unit => ({...unit, Copies: GetNumberOfCopies(tier)})); // Eventually stored in DB
-      pool.set(tier, new Map(units.map(x => [x.Id, x])));
-    });
-
-    return pool;
-  }
-
-  return (
-    <StrictMode>
-    <div className="App">
-      <header className="App-header">
-        {/* <img src={logo} className="App-logo" alt="logo" /> */}
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <p></p>
-        <Game shopSize={5} pool={GenerateUnitPool()}/>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-    </StrictMode>
-  );
-}
-
-export default App;
+export default Game;
