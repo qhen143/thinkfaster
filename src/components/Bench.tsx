@@ -1,11 +1,12 @@
 import React from 'react';
-import BenchUnit from './BenchUnit';
-import { Unit, PoolUnit } from "../types/Units";
+import ActiveUnit from './ActiveUnit';
+import { GameState } from '../types/GameState';
 
-function Bench(props: {units: Unit[], bench: Unit[], pool: Map<number, Map<number, PoolUnit>>, onClick: Function}) {
+function Bench(props: { state: GameState, onClick: Function}) {
+  const state = props.state;
   return (
     <div >
-      {(props.units)?.map((unit) => { return <BenchUnit key={unit.UID} unit={unit} onClick={() => props.onClick(unit, props.bench, props.pool)}/> })}
+      {(state.Container)?.map((unit) => { return <ActiveUnit key={unit.UID} unit={unit} onClick={() => props.onClick(unit, state)}/> })}
     </div>
   )
 }

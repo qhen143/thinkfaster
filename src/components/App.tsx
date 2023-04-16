@@ -41,6 +41,11 @@ function App() {
   let settings: Settings = {
     UseMouseTracker: true,
     shopSize: 5,
+    benchSize: 9,
+
+    // Board
+    rows: 4,
+    columns: 7,
 
     // Level
     StartingLevel: 1,

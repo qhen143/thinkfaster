@@ -2,7 +2,7 @@ import styles from '../../styles/Unit.module.css';
 import React from 'react';
 import { Unit } from "../types/Units";
 
-function BenchUnit(props: {unit: Unit, onClick: Function}) {
+function ActiveUnit(props: {unit: Unit, onClick: Function}) {
 
   function getUnitStyle(className: string) {
     switch (className) {
@@ -25,4 +25,4 @@ function BenchUnit(props: {unit: Unit, onClick: Function}) {
   return <button className={getUnitStyle("tier" + unit.Tier)} onClick={() => props.onClick()}>{unit.Name + unit.StarLevel}</button>
 }
 
-export default BenchUnit;
+export default ActiveUnit;
