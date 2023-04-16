@@ -1,18 +1,17 @@
 import { v4 as uuidv4 } from 'uuid';
 import { Unit, PoolUnit } from '../types/Units'
 
-// TODO hardcoded
 // InitialStates
-export function initEmptyShop() {
-    return emptyArray(5);
+export function initEmptyShop(size: number): Unit[] {
+    return emptyArray(size);
 };
 
-export function initEmptyBench() {
-    return emptyArray(9);
+export function initEmptyBench(size: number): Unit[] {
+    return emptyArray(size);
 };
 
-export function initEmptyBoard() {
-    return emptyArray(4*7); //4 rows 7 cols
+export function initEmptyBoard(size: number): Unit[] {
+    return emptyArray(size); //4 rows 7 cols
 }
 
 export function emptyArray(size: number) {
