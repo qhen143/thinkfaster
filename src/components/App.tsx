@@ -1,9 +1,9 @@
-// import logo from './logo.svg';
 import styles from '../../styles/App.module.css';
-import { StrictMode,  } from 'react';
 import data from "../set8-5.json"
 import React from 'react';
 import Game from './Game';
+import { StrictMode } from 'react';
+import { Settings } from '../types/Settings';
 
 function App() {
 
@@ -38,7 +38,11 @@ function App() {
     return pool;
   }
 
-  let levelSettings = {
+  let settings: Settings = {
+    UseMouseTracker: true,
+    shopSize: 5,
+
+    // Level
     StartingLevel: 1,
     StartingXP: 0,
     XPModifier: 4,
@@ -51,7 +55,7 @@ function App() {
     <StrictMode>
     <div className={styles.App} >
       <header className={styles.AppHeader} >
-        <Game shopSize={5} pool={generateUnitPool()} levelSettings={levelSettings}/>
+        <Game pool={generateUnitPool()} settings={settings}/>
       </header>
     </div>
     </StrictMode>
