@@ -6,6 +6,7 @@ import Board from './Board';
 import Bench from './Bench';
 import Shop from './Shop';
 import Actions from './Actions';
+import { useWindowListener } from '../helpers/useWindowListener';
 import { Unit, PoolUnit } from '../types/Units'
 import { LevelSettings } from '../types/LevelSettings'
 
@@ -66,7 +67,6 @@ function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: numbe
       setEKeyHeld(false);
     
     if (key === 'd') {
-      // debugger;
       refreshShop(shop, level, props.shopSize, pool.current);
     } else if (key === 'f') {
       buyXP(xp, level, props.levelSettings);
@@ -82,14 +82,8 @@ function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: numbe
     }
   }
 
-  useEffect(() => {
-    window.addEventListener('keydown', downHandler);
-    window.addEventListener('keyup', upHandler);
-    return () => {
-      window.removeEventListener('keydown', downHandler);
-      window.removeEventListener('keyup', upHandler);
-    };
-  }, []);
+  useWindowListener('keydown', downHandler);
+  useWindowListener('keyup', upHandler, [shop, pool, xp, level]);
   
   function findFirstEmptySlot(array: Unit[]): number {
     return array.findIndex(x => x.Id === 0);
@@ -245,14 +239,19 @@ function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: numbe
     if (threshold === undefined)
       return; //TODO error handle
 
-    if (newXP >= threshold) {
-      setXP(newXP-threshold);
+    while (newXP >= threshold) {
+      newXP -= threshold;
+      setXP(newXP);
       setLevel(++level)
     }
   }
 
   function getXPThresholdForLevel(level: number, thresholds: number[]): number {
-    return thresholds[level-1]; // Assumption: number of levels matches items in array.
+    return thresholds[level-1]; // Assumption: number of levels matches the size of thresholds.
+  }
+
+  function getUnitLimitForLevel(level: number, unitLimits: number[]): number {
+    return unitLimits[level-1]; // Assumption: number of levels matches the size of unitLimit.
   }
 
   function generateShop(level: number, shopSize: number, pool: Map<number, Map<number, PoolUnit>>): Unit[] {
@@ -344,14 +343,15 @@ function Game(props: {pool: Map<number, Map<number, PoolUnit>> , shopSize: numbe
     setShop(newShop);
   }
 
+  let xpString = level >= props.levelSettings.MaxLevel ? "" : " Experience: " + xp + "/" + getXPThresholdForLevel(level, props.levelSettings.LevelThresholds);
   let actions = [
-    { id: 1, description: "Buy XP (4g) Level: " + level + " Experience: " + xp + "/" + getXPThresholdForLevel(level, props.levelSettings.LevelThresholds), onClick: () => buyXP(xp, level, props.levelSettings) },
-    { id: 2, description: "Refresh (2g)", onClick: () => refreshShop(shop, level, props.shopSize, pool.current) },
+    { id: 1, descriptionByLine: ["Buy XP (4g)", "Level: " + level, xpString], onClick: () => buyXP(xp, level, props.levelSettings) },
+    { id: 2, descriptionByLine: ["Refresh (2g)"], onClick: () => refreshShop(shop, level, props.shopSize, pool.current) },
   ]
 
   return (
     <div>
-      <Board />
+      <Board unitLimit={getUnitLimitForLevel(level, props.levelSettings.UnitLimits)} />
 
       {/* Bench  */}      
       <div className={styles.row} >

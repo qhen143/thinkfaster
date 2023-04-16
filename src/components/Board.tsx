@@ -2,9 +2,12 @@ import React from 'react';
 import BenchUnit from './BenchUnit';
 import { Unit, PoolUnit } from '../types/Units'
 
-function Board() {
+function Board(props: { unitLimit: number }) {
   return (
-    <div></div>
+    <>    
+      <div>0/{props.unitLimit}</div>
+      <div></div>
+    </>
   )
 }
 

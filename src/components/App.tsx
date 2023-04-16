@@ -42,7 +42,8 @@ function App() {
     StartingLevel: 1,
     StartingXP: 0,
     XPModifier: 4,
-    LevelThresholds: [2, 6, 10, 20, 36, 56, 80, 100], // TODO use user input
+    MaxLevel: 9,
+    LevelThresholds: [2, 2, 6, 10, 20, 36, 56, 80, 100], // TODO use user input
     UnitLimits: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
   }
 
