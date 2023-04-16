@@ -10,8 +10,8 @@ export function initEmptyBench(size: number): Unit[] {
     return emptyArray(size);
 };
 
-export function initEmptyBoard(size: number): Unit[] {
-    return emptyArray(size); //4 rows 7 cols
+export function initEmptyBoard(row: number, col: number): Unit[] {
+    return emptyArray(row*col);
 }
 
 export function emptyArray(size: number) {

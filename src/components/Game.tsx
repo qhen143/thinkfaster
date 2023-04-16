@@ -16,7 +16,7 @@ function Game(props: { settings: Settings, pool: Map<number, Map<number, PoolUni
   const pool = useRef(props.pool);
 
   const [bench, setBench] = useState<Unit[]>(() => GameHelper.initEmptyBench(props.settings.benchSize));
-  const [board, setBoard] = useState<Unit[]>(() => GameHelper.initEmptyBench(props.settings.rows*props.settings.columns));
+  const [board, setBoard] = useState<Unit[]>(() => GameHelper.initEmptyBoard(props.settings.rows, props.settings.columns));
   const [shop, setShop] = useState<Unit[]>(() => GameHelper.initEmptyShop(props.settings.shopSize));
   const [level, setLevel] = useState<number>(props.settings.StartingLevel);
   const [xp, setXP] = useState<number>(props.settings.StartingXP);
