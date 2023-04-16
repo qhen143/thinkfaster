@@ -1,5 +1,5 @@
 export interface Action {
     id: number,
-    description: string,
+    descriptionByLine: string[],
     onClick: Function
 }

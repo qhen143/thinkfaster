@@ -3,7 +3,7 @@ import styles from '../../styles/Unit.module.css';
 import { Unit } from "../types/Units";
 
 function ShopUnit(props: {unit: Unit, onClick: Function}) {
-  function GetUnitStyle(className: string) {
+  function getUnitStyle(className: string) {
     switch (className) {
       case "tier1":
         return styles.tier1;
@@ -21,7 +21,7 @@ function ShopUnit(props: {unit: Unit, onClick: Function}) {
   }
 
   const unit = props.unit;
-  return <button className={GetUnitStyle("tier" + unit.Tier)} onClick={() => props.onClick()}>{unit.Name}</button>
+  return <button className={getUnitStyle("tier" + unit.Tier)} onClick={() => props.onClick()}>{unit.Name}</button>
 }
 
 export default ShopUnit;

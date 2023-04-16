@@ -24,7 +24,7 @@ function App() {
     }
   }
 
-  function GenerateUnitPool() {
+  function generateUnitPool() {
     
     // Create Map (by Tier) of Map (by Unit)
     const pool = new Map();
@@ -38,11 +38,20 @@ function App() {
     return pool;
   }
 
+  let levelSettings = {
+    StartingLevel: 1,
+    StartingXP: 0,
+    XPModifier: 4,
+    MaxLevel: 9,
+    LevelThresholds: [2, 2, 6, 10, 20, 36, 56, 80, 100], // TODO use user input
+    UnitLimits: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+  }
+
   return (
     <StrictMode>
     <div className={styles.App} >
       <header className={styles.AppHeader} >
-        <Game shopSize={5} pool={GenerateUnitPool()}/>
+        <Game shopSize={5} pool={generateUnitPool()} levelSettings={levelSettings}/>
       </header>
     </div>
     </StrictMode>
