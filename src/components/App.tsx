@@ -4,6 +4,7 @@ import React from 'react';
 import Game from './Game';
 import { StrictMode } from 'react';
 import { Settings } from '../types/Settings';
+import Menu from './Menu';
 
 function App() {
 
@@ -58,10 +59,8 @@ function App() {
 
   return (
     <StrictMode>
-    <div className={styles.App} >
-      <header className={styles.AppHeader} >
-        <Game pool={generateUnitPool()} settings={settings}/>
-      </header>
+    <div className={styles.App}>
+      <Game pool={generateUnitPool()} settings={settings}/>
     </div>
     </StrictMode>
   );
