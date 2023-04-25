@@ -32,8 +32,8 @@ function SettingSlider(props: {
     // TODO use value
     return (
         <>
-            <Grid xs={12}>
-                <Typography component="h1" variant="h6" align="left">
+            <Grid xs={12} >
+                <Typography variant="body1" align="left">
                     {props.label}
                 </Typography>
             </Grid>
