@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Menu from '../src/components/Menu';
+import Home from '../src/components/Home';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import AppBar from '@mui/material/AppBar';
@@ -36,7 +37,7 @@ export default function HomePage() {
             </Typography>
           </Toolbar>
         </AppBar>
-        <Menu />
+        <Home/>
       </ThemeProvider>
     </>
   )

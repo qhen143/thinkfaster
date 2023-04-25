@@ -43,7 +43,8 @@ function SettingSlider(props: {
                     // onChange={handleSliderChange}
                     aria-labelledby="input-slider"
                     defaultValue={props.defaultValue} min={props.min} max={props.max}
-                    valueLabelDisplay='on'
+                    valueLabelDisplay='auto'
+                    marks={[{value: props.min, label: props.min}, {value: props.max, label: props.max}]}
                     sx={{ my: { xs: 1, md: 2 } }}
                 />
             </Grid>
