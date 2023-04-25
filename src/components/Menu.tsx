@@ -51,9 +51,9 @@ function Menu() {
                 <SettingSlider label='Bench Size' defaultValue={9} min={2} max={10}/>
                 <SettingSlider label='XP Modifer' defaultValue={4} min={1} max={10}/>
             </Grid>
-
+            <Divider />
             {/* Play Button */}
-            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'center', py: { xs: 1, md: 2 } }}>
                 <Button
                     variant="contained"
                     size="large"

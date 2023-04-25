@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 
 const darkTheme = createTheme({
   palette: {
-    mode: 'dark',
+    // mode: 'dark',
   },
 });
 
