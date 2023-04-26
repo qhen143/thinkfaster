@@ -11,6 +11,9 @@ export interface Settings extends LevelSettings, BoardSettings {
     readonly UseMouseTracker: bool,
     readonly shopSize: number,
     readonly benchSize: number,
+    readonly time: number
+    readonly StartingGold: number,
+    readonly RollCost: number
 }
 
 export interface BoardSettings {

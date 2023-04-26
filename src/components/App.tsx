@@ -43,6 +43,9 @@ function App() {
     UseMouseTracker: true,
     shopSize: 5,
     benchSize: 9,
+    time: 100,
+    StartingGold: 0,
+    RollCost: 2,
 
     // Board
     rows: 4,

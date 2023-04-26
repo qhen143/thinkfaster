@@ -1,8 +1,7 @@
 import { Typography, Slider, Input } from "@mui/material";
 import { useState } from "react";
 import Grid from '@mui/material/Unstable_Grid2';
-
-
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 function SettingSlider(props: {
     label: string,
@@ -42,7 +41,7 @@ function SettingSlider(props: {
                     // value={typeof value === 'number' ? value : 0}
                     // onChange={handleSliderChange}
                     aria-labelledby="input-slider"
-                    defaultValue={props.defaultValue} min={props.min} max={props.max}
+                    value={props.defaultValue} min={props.min} max={props.max}
                     valueLabelDisplay='auto'
                     marks={[{value: props.min, label: props.min}, {value: props.max, label: props.max}]}
                     sx={{ my: { xs: 1, md: 2 } }}
