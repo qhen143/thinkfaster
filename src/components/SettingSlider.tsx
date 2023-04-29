@@ -5,16 +5,23 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 function SettingSlider(props: {
     label: string,
-    defaultValue: number,
+    value: number,
     min: number,
     max: number,
+    onChange: (event: Event, value: number | number[], activeThumb: number) => void
 }) 
 {
-    // const [value, setValue] = useState<number | string | Array<number | string>>(props.defaultValue);
+    // const [value, setValue] = useState<number | number[]>(props.defaultValue);
+
+    // const usePresetValue = (value: number) => {
+    //     setValue(value);
+    // }
+
     // const handleSliderChange = (event: Event, newValue: number | number[]) => {
     //     setValue(newValue);
     //   };
     
+    //   usePresetValue(props.defaultValue);
     // const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     // setValue(event.target.value === '' ? '' : Number(event.target.value));
     // };
@@ -38,10 +45,11 @@ function SettingSlider(props: {
             </Grid>
             <Grid xs={12}>
                 <Slider
-                    // value={typeof value === 'number' ? value : 0}
-                    // onChange={handleSliderChange}
+                    // value={typeof value === 'number' ? value : props.min}
+                    onChange={props.onChange}
+                    value={props.value}
                     aria-labelledby="input-slider"
-                    value={props.defaultValue} min={props.min} max={props.max}
+                    min={props.min} max={props.max}
                     valueLabelDisplay='auto'
                     marks={[{value: props.min, label: props.min}, {value: props.max, label: props.max}]}
                     sx={{ my: { xs: 1, md: 2 } }}

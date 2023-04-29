@@ -51,7 +51,8 @@ function Home() {
                             PaperProps={{
                                 sx: {
                                     borderRadius: 7,
-                                    mr: -2
+                                    mr: -2,
+                                    width: 1/4
                                 },
                             }}
                     >

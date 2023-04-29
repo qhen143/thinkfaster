@@ -101,6 +101,10 @@ function Menu() {
         setSelectedValue(event.target.value);
     };
 
+    const handleSliderChange = (settingName: keyof Settings) => (event: Event, newValue: number | number[]) => {
+        setSetting(x => ({...x, [settingName]: newValue as number}))
+    }
+
     function AdvancedSettings(showAdvancedSettings: boolean) {
         if (!showAdvancedSettings)
             return <></>
@@ -108,13 +112,13 @@ function Menu() {
         return (
             <>
                 <Grid container sx={{ px: { xs: 4, md: 8 }, py: { xs: 1, md: 2 } }}>
-                    <SettingSlider label='Shop Size' defaultValue={setting.shopSize} min={1} max={10}/>
-                    <SettingSlider label='Bench Size' defaultValue={setting.benchSize} min={2} max={10}/>
-                    <SettingSlider label='Board Height' defaultValue={setting.rows} min={1} max={5}/>
-                    <SettingSlider label='Board Width' defaultValue={setting.columns} min={1} max={10}/>
-                    <SettingSlider label='XP Modifer' defaultValue={setting.XPModifier} min={1} max={10}/>
-                    <SettingSlider label='Max Level' defaultValue={setting.MaxLevel} min={1} max={10}/>
-                    <SettingSlider label='Gold per Refresh' defaultValue={setting.RollCost} min={0} max={2}/>
+                    <SettingSlider label='Shop Size' value={setting.shopSize} min={1} max={10} onChange={handleSliderChange('shopSize')}/>
+                    <SettingSlider label='Bench Size' value={setting.benchSize} min={2} max={10} onChange={handleSliderChange('benchSize')}/>
+                    <SettingSlider label='Board Height' value={setting.rows} min={1} max={5} onChange={handleSliderChange('rows')}/>
+                    <SettingSlider label='Board Width' value={setting.columns} min={1} max={10} onChange={handleSliderChange('columns')}/>
+                    <SettingSlider label='XP Modifer' value={setting.XPModifier} min={1} max={10} onChange={handleSliderChange('XPModifier')}/>
+                    <SettingSlider label='Max Level' value={setting.MaxLevel} min={1} max={10} onChange={handleSliderChange('MaxLevel')}/>
+                    <SettingSlider label='Gold per Refresh' value={setting.RollCost} min={0} max={2} onChange={handleSliderChange('RollCost')}/>
                 </Grid>
                 <Divider />
             </>
@@ -152,9 +156,9 @@ function Menu() {
             <Divider />
             {/* Basic Settings */}
             <Grid container sx={{ px: { xs: 4, md: 8 }, py: { xs: 2, md: 4 } }}>
-                <SettingSlider label='Starting Time' defaultValue={setting.time} min={0} max={100}/>
-                <SettingSlider label='Starting Level' defaultValue={setting.StartingLevel} min={1} max={10}/>
-                <SettingSlider label='Starting Gold' defaultValue={setting.StartingGold} min={0} max={100}/>
+                <SettingSlider label='Starting Time' value={setting.time} min={0} max={100} onChange={handleSliderChange('time')}/>
+                <SettingSlider label='Starting Level' value={setting.StartingLevel} min={1} max={10} onChange={handleSliderChange('StartingLevel')}/>
+                <SettingSlider label='Starting Gold' value={setting.StartingGold} min={0} max={100} onChange={handleSliderChange('StartingGold')}/>
                 {/* // TODO keybinds */}
             </Grid>   
             <FormControlLabel labelPlacement="start" control={
