@@ -7,10 +7,16 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 
+const font =  "'Bangers', cursive";
+
 const darkTheme = createTheme({
   palette: {
-    // mode: 'dark',
+    mode: 'dark',
   },
+  typography: {
+    fontFamily: font,
+    fontSize: 24
+  }
 });
 
 export default function HomePage() {
@@ -32,8 +38,8 @@ export default function HomePage() {
           }}
         >
           <Toolbar>
-            <Typography variant="h6" color="inherit" noWrap>
-              Think Faster Tactics (TFT)
+            <Typography variant="h5" color="inherit">
+              Think Faster Tactics!
             </Typography>
           </Toolbar>
         </AppBar>
