@@ -50,9 +50,19 @@ function Home() {
                             onClose={() => toggleDrawer(open)}
                             PaperProps={{
                                 sx: {
-                                    borderRadius: 7,
-                                    mr: -2,
-                                    width: 1/4
+                                    // borderRadius: 7,
+                                    // mr: -2,
+                                    // width: 1/4,
+                                    minWidth: 1/4,
+                                    overflowY: 'scroll',
+                                    scrollbarWidth: 'thin',
+                                    '::-webkit-scrollbar': {
+                                      width: '0.5rem',
+                                    },
+                                    '::-webkit-scrollbar-thumb': {
+                                      borderRadius: '1rem',
+                                      background: '#888',
+                                    },
                                 },
                             }}
                     >

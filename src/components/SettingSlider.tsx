@@ -1,4 +1,4 @@
-import { Typography, Slider, Input } from "@mui/material";
+import { Typography, Slider, Input, ListItem } from "@mui/material";
 import { useState } from "react";
 import Grid from '@mui/material/Unstable_Grid2';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
@@ -38,23 +38,26 @@ function SettingSlider(props: {
     // TODO use value
     return (
         <>
-            <Grid xs={12} >
+            <ListItem sx={{ pt: {xs: 1, md: 2 } }}>
                 <Typography variant="body1" align="left">
                     {props.label}
                 </Typography>
-            </Grid>
-            <Grid xs={12}>
+            </ListItem>
+
+            <ListItem divider sx={{ pb: {xs: 1, md: 2 } }}>
                 <Slider
-                    // value={typeof value === 'number' ? value : props.min}
-                    onChange={props.onChange}
-                    value={props.value}
-                    aria-labelledby="input-slider"
-                    min={props.min} max={props.max}
-                    valueLabelDisplay='auto'
-                    marks={[{value: props.min, label: props.min}, {value: props.max, label: props.max}]}
-                    sx={{ my: { xs: 1, md: 2 } }}
-                />
-            </Grid>
+                        // value={typeof value === 'number' ? value : props.min}
+                        onChange={props.onChange}
+                        value={props.value}
+                        aria-labelledby="input-slider"
+                        min={props.min} max={props.max}
+                        valueLabelDisplay='auto'
+                        marks={[{value: props.min, label: props.min}, {value: props.max, label: props.max}]}
+                        sx={{ my: { xs: 1, md: 2 } }}
+                    />
+            </ListItem>
+
+            {/* </Grid> */}
                 {/* <Grid item>
                     <Input
                         value={value}

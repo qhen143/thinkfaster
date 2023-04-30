@@ -1,4 +1,4 @@
-import { Accordion, AccordionDetails, AccordionSummary, Box, Button, ButtonGroup, Card, Container, Divider, Drawer, FormControl, FormControlLabel, Paper, Radio, RadioGroup, Slider, Switch, Typography } from "@mui/material";
+import { Accordion, AccordionDetails, AccordionSummary, Box, Button, ButtonGroup, Card, Container, Divider, Drawer, FormControl, FormControlLabel, FormGroup, List, ListItem, Paper, Radio, RadioGroup, Slider, Switch, Typography } from "@mui/material";
 import Grid from '@mui/material/Unstable_Grid2';
 import SettingSlider from "./SettingSlider";
 import { useState } from "react";
@@ -111,16 +111,13 @@ function Menu() {
 
         return (
             <>
-                <Grid container sx={{ px: { xs: 4, md: 8 }, py: { xs: 1, md: 2 } }}>
-                    <SettingSlider label='Shop Size' value={setting.shopSize} min={1} max={10} onChange={handleSliderChange('shopSize')}/>
-                    <SettingSlider label='Bench Size' value={setting.benchSize} min={2} max={10} onChange={handleSliderChange('benchSize')}/>
-                    <SettingSlider label='Board Height' value={setting.rows} min={1} max={5} onChange={handleSliderChange('rows')}/>
-                    <SettingSlider label='Board Width' value={setting.columns} min={1} max={10} onChange={handleSliderChange('columns')}/>
-                    <SettingSlider label='XP Modifer' value={setting.XPModifier} min={1} max={10} onChange={handleSliderChange('XPModifier')}/>
-                    <SettingSlider label='Max Level' value={setting.MaxLevel} min={1} max={10} onChange={handleSliderChange('MaxLevel')}/>
-                    <SettingSlider label='Gold per Refresh' value={setting.RollCost} min={0} max={2} onChange={handleSliderChange('RollCost')}/>
-                </Grid>
-                <Divider />
+                <SettingSlider label='Shop Size' value={setting.shopSize} min={1} max={10} onChange={handleSliderChange('shopSize')}/>
+                <SettingSlider label='Bench Size' value={setting.benchSize} min={2} max={10} onChange={handleSliderChange('benchSize')}/>
+                <SettingSlider label='Board Height' value={setting.rows} min={1} max={5} onChange={handleSliderChange('rows')}/>
+                <SettingSlider label='Board Width' value={setting.columns} min={1} max={10} onChange={handleSliderChange('columns')}/>
+                <SettingSlider label='XP Modifer' value={setting.XPModifier} min={1} max={10} onChange={handleSliderChange('XPModifier')}/>
+                <SettingSlider label='Max Level' value={setting.MaxLevel} min={1} max={10} onChange={handleSliderChange('MaxLevel')}/>
+                <SettingSlider label='Gold per Refresh' value={setting.RollCost} min={0} max={2} onChange={handleSliderChange('RollCost')}/>
             </>
         );
     }
@@ -135,41 +132,44 @@ function Menu() {
     // TODO FONT
     return (
         <>
-            {/* Heading */}
-            <Typography variant="h6" align="center" sx={{ p: {xs: 1, md: 2}}}>
-                Game Settings
-            </Typography>
-            <Divider />
-            {/* Presets */}
-            <Box alignItems="center" justifyContent="center" display="flex" flexDirection="column">
+        <List dense sx={{ px: {xs: 3, md: 6} }}>
+            <ListItem divider sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <Typography variant="h6" align="center" sx={{ p: {xs: 1, md: 2}}}>
+                    Game Settings
+                </Typography>
+                <Divider />
+            </ListItem>
+
+            <ListItem sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <Typography variant="body1" align="left" sx={{ pt: { xs: 1, md: 2 } }}>
                     Presets
                 </Typography>
+            </ListItem>
+            <ListItem divider sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <ButtonGroup aria-label="outlined button group" 
-                    sx={{ py: { xs: 1, md: 2 } }}
+                    sx={{ pb: { xs: 1, md: 2 } }}
                 >
                     <Button onClick={() => setPresets(Presets.Standard)}>Default</Button>
                     <Button onClick={() => setPresets(Presets.ThinkFaster)}>Think Faster</Button>
                     <Button onClick={() => setPresets(Presets.Blitz)}>Blitz</Button>
                 </ButtonGroup>
-            </Box>
-            <Divider />
-            {/* Basic Settings */}
-            <Grid container sx={{ px: { xs: 4, md: 8 }, py: { xs: 2, md: 4 } }}>
-                <SettingSlider label='Starting Time' value={setting.time} min={0} max={100} onChange={handleSliderChange('time')}/>
-                <SettingSlider label='Starting Level' value={setting.StartingLevel} min={1} max={10} onChange={handleSliderChange('StartingLevel')}/>
-                <SettingSlider label='Starting Gold' value={setting.StartingGold} min={0} max={100} onChange={handleSliderChange('StartingGold')}/>
-                {/* // TODO keybinds */}
-            </Grid>   
-            <FormControlLabel labelPlacement="start" control={
-                <Switch checked={showAdvancedSettings} onChange={() => setShowAdvancedSettings(!showAdvancedSettings)} />
-            } label="Show Advanced Settings" sx={{ px: { xs: 2, md: 4 }}}/>
-            <Divider />
-            {/* Advanced Settings */}
-            {/* {HighlightMouse(props.enableMouseTracker)} */}
+            </ListItem>
+
+            <SettingSlider label='Starting Time' value={setting.time} min={0} max={100} onChange={handleSliderChange('time')}/>
+            <SettingSlider label='Starting Level' value={setting.StartingLevel} min={1} max={10} onChange={handleSliderChange('StartingLevel')}/>
+            <SettingSlider label='Starting Gold' value={setting.StartingGold} min={0} max={100} onChange={handleSliderChange('StartingGold')}/>
+            
+            <ListItem divider sx={{ display: 'flex', justifyContent: 'right', alignItems: 'right', py: {xs: 1, md: 2 } }}>
+                <FormGroup>
+                    <FormControlLabel labelPlacement="start" control={
+                        <Switch checked={showAdvancedSettings} onChange={() => setShowAdvancedSettings(!showAdvancedSettings)} />
+                    } label="Show Advanced Settings"/>
+                </FormGroup> 
+            </ListItem>
+
             {AdvancedSettings(showAdvancedSettings)}
-            {/* Play Button */}
-            <Box sx={{ display: 'flex', justifyContent: 'center', py: { xs: 1, md: 2 } }}>
+            
+            <ListItem sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', py: {xs: 1, md: 2 } }}>
                 <Button
                     variant="contained"
                     size="large"
@@ -180,7 +180,8 @@ function Menu() {
                         Play
                     </Typography>
                 </Button>
-            </Box>
+            </ListItem>
+        </List>
         </>
     );
 }
