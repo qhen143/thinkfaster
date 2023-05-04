@@ -7,7 +7,10 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 
-const font =  "'Bangers', cursive";
+import Image from 'next/image'
+import logopng from '../public/icon-basic.png'
+
+const font =  "'Yatra One', cursive";
 
 const darkTheme = createTheme({
   palette: {
@@ -20,6 +23,18 @@ const darkTheme = createTheme({
 });
 
 export default function HomePage() {
+
+  function Icon(props) {
+    return (
+        <Image
+            src={logopng}
+            alt="Picture of the author"
+            width={50}
+            height={50}
+          />
+    )
+}
+
   return (
     <>
       <Head>
@@ -38,7 +53,8 @@ export default function HomePage() {
           }}
         >
           <Toolbar>
-            <Typography variant="h5" color="inherit">
+            <Icon/>
+            <Typography variant="h5" color="inherit" sx={{ px: {xs: 1, sm: 2}, py: {xs: 0.5, sm: 1} }}>
               Think Faster Tactics!
             </Typography>
           </Toolbar>

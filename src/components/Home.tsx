@@ -1,6 +1,8 @@
-import { Box, Button, Card, Container, Divider, Drawer, Link, List, ListItem, ListItemText, ThemeProvider, Typography, createTheme } from "@mui/material";
+import { Box, Button, Card, Container, Divider, Drawer, Link, List, ListItem, ListItemText, SvgIcon, ThemeProvider, Typography, createTheme } from "@mui/material";
 import Menu from "./Menu";
 import { useState } from "react";
+import mypic from '../../public/logo.svg'
+import logo from '../../public/icon-basic.svg'
 
 function Home() {
 
@@ -16,6 +18,8 @@ function Home() {
     //     console.log(enableMouseTracker);
     // }
 
+
+
     const theme = createTheme({
 
       });
@@ -25,12 +29,12 @@ function Home() {
             {/* <ThemeProvider theme={theme}> */}
                 <Container maxWidth='md'>
                     <Card variant="outlined" sx={{ p: { xs: 1, md: 2 } }}>
-                        <Typography variant="h3" align="center" sx={{ p: {xs: 1, md: 2}}}>
+                        <Typography variant="h4" align="center" sx={{ p: {xs: 1, md: 2}}}>
                             Think Faster Tactics!
                         </Typography>
                         <Divider />
                         //TODO add overview
-                        <Typography variant="h4" sx={{ px: {xs: 1, md: 2}, pt: {xs: 1, md: 2} }}>
+                        <Typography variant="h5" sx={{ px: {xs: 1, md: 2}, pt: {xs: 1, md: 2} }}>
                             How to play
                         </Typography>
                         <List sx={{ listStyle: "decimal", px: {xs: 2, md: 4} }}>
@@ -66,7 +70,7 @@ function Home() {
                                         },
                                         '::-webkit-scrollbar-thumb': {
                                         borderRadius: '1rem',
-                                        background: '#888',
+                                        background: '#777',
                                         },
                                     },
                                 }}
