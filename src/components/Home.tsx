@@ -1,8 +1,12 @@
-import { Box, Button, Card, Container, Divider, Drawer, Link, List, ListItem, ListItemText, SvgIcon, ThemeProvider, Typography, createTheme } from "@mui/material";
+import { Box, Button, Card, Container, Divider, Drawer, Link, List, ListItem, ListItemText, Stack, SvgIcon, ThemeProvider, Typography, createTheme } from "@mui/material";
 import Menu from "./Menu";
 import { useState } from "react";
 import mypic from '../../public/logo.svg'
 import logo from '../../public/icon-basic.svg'
+import uniticon from '../../public/Set8-Samira.jpg'
+import HexagonTile from "./HexagonTile";
+import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
+
 
 function Home() {
 
@@ -40,7 +44,20 @@ function Home() {
                         <List sx={{ listStyle: "decimal", px: {xs: 2, md: 4} }}>
                             <ListItem sx={{ display: "list-item" }}>
                                 <ListItemText primary="Click on the same units until you they combine into a golden unit."/>
-                                //TODO add images
+                                {/* Make box that centers horizontally a component */}
+                                <Box display="flex" justifyContent="center" alignItems="center"> 
+                                    <Stack direction="row" spacing={5}>
+                                        <Stack direction="row" spacing={-5}>
+                                            <HexagonTile src={uniticon}/>
+                                            <HexagonTile src={uniticon}/>
+                                            <HexagonTile src={uniticon}/>
+                                        </Stack>
+                                        <Stack direction="row" alignItems="center" spacing={5}>
+                                            <KeyboardDoubleArrowRightIcon fontSize='large' sx={{}}/>
+                                            <HexagonTile src={uniticon}/>
+                                        </Stack>
+                                    </Stack>
+                                </Box>
                             </ListItem>
                             <ListItem sx={{ display: "list-item" }}>
                                 <ListItemText primary="Do step 1 as fast as you can!" />
