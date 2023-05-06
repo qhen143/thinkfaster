@@ -111,13 +111,13 @@ function Menu() {
 
         return (
             <>
-                <SettingSlider label='Shop Size' value={setting.shopSize} min={1} max={10} onChange={handleSliderChange('shopSize')}/>
-                <SettingSlider label='Bench Size' value={setting.benchSize} min={2} max={10} onChange={handleSliderChange('benchSize')}/>
-                <SettingSlider label='Board Height' value={setting.rows} min={1} max={5} onChange={handleSliderChange('rows')}/>
-                <SettingSlider label='Board Width' value={setting.columns} min={1} max={10} onChange={handleSliderChange('columns')}/>
-                <SettingSlider label='XP Modifer' value={setting.XPModifier} min={1} max={10} onChange={handleSliderChange('XPModifier')}/>
-                <SettingSlider label='Max Level' value={setting.MaxLevel} min={1} max={10} onChange={handleSliderChange('MaxLevel')}/>
-                <SettingSlider label='Gold per Refresh' value={setting.RollCost} min={0} max={2} onChange={handleSliderChange('RollCost')}/>
+                <SettingSlider label='SHOP SIZE' value={setting.shopSize} min={1} max={10} onChange={handleSliderChange('shopSize')}/>
+                <SettingSlider label='BENCH SIZE' value={setting.benchSize} min={2} max={10} onChange={handleSliderChange('benchSize')}/>
+                <SettingSlider label='BOARD HEIGHT' value={setting.rows} min={1} max={5} onChange={handleSliderChange('rows')}/>
+                <SettingSlider label='BOARD WIDTH' value={setting.columns} min={1} max={10} onChange={handleSliderChange('columns')}/>
+                <SettingSlider label='XP MODIFIER' value={setting.XPModifier} min={1} max={10} onChange={handleSliderChange('XPModifier')}/>
+                <SettingSlider label='MAX LEVEL' value={setting.MaxLevel} min={1} max={10} onChange={handleSliderChange('MaxLevel')}/>
+                <SettingSlider label='REFRESH COST' value={setting.RollCost} min={0} max={2} onChange={handleSliderChange('RollCost')}/>
             </>
         );
     }
@@ -155,15 +155,15 @@ function Menu() {
                 </ButtonGroup>
             </ListItem>
 
-            <SettingSlider label='Starting Time' value={setting.time} min={0} max={100} onChange={handleSliderChange('time')}/>
-            <SettingSlider label='Starting Level' value={setting.StartingLevel} min={1} max={10} onChange={handleSliderChange('StartingLevel')}/>
-            <SettingSlider label='Starting Gold' value={setting.StartingGold} min={0} max={100} onChange={handleSliderChange('StartingGold')}/>
+            <SettingSlider label='STARTING TIME' value={setting.time} min={0} max={100} onChange={handleSliderChange('time')}/>
+            <SettingSlider label='STARTING LEVEL' value={setting.StartingLevel} min={1} max={10} onChange={handleSliderChange('StartingLevel')}/>
+            <SettingSlider label='STARTING GOLD' value={setting.StartingGold} min={0} max={100} onChange={handleSliderChange('StartingGold')}/>
             
             <ListItem divider sx={{ display: 'flex', justifyContent: 'right', alignItems: 'right', py: {xs: 1, md: 2 } }}>
                 <FormGroup>
                     <FormControlLabel labelPlacement="start" control={
                         <Switch checked={showAdvancedSettings} onChange={() => setShowAdvancedSettings(!showAdvancedSettings)} />
-                    } label="Show Advanced Settings"/>
+                    } label="ADVANCED SETTINGS"/>
                 </FormGroup> 
             </ListItem>
 

@@ -12,14 +12,14 @@ import { alpha } from '@mui/material/styles';
 import Image from 'next/image'
 import logopng from '../public/icon-basic.png'
 
-const font =  "'Yatra One', cursive";
+const font =  "'Exo 2', sans-serif";
 
 const darkTheme = createTheme({
   palette: {
     mode: 'dark',
     background: {
       default: '#64748B',
-      paper: 'rgba(0, 0, 0, 0.6)',
+      // paper: 'rgba(0, 0, 0, 0.6)',
     },
     // default: {
     //   main: '#64748B'

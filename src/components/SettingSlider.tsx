@@ -39,12 +39,12 @@ function SettingSlider(props: {
     return (
         <>
             <ListItem sx={{ pt: {xs: 1, md: 2 } }}>
-                <Typography variant="body1" align="left">
+                <Typography variant="body2" align="left">
                     {props.label}
                 </Typography>
             </ListItem>
 
-            <ListItem divider sx={{ pb: {xs: 1, md: 2 } }}>
+            <ListItem divider sx={{ pb: {xs: 2, md: 4 } }}>
                 <Slider
                         // value={typeof value === 'number' ? value : props.min}
                         onChange={props.onChange}
