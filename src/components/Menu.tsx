@@ -135,14 +135,14 @@ function Menu() {
         <List dense sx={{ px: {xs: 3, md: 6} }}>
             <ListItem divider sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <Typography variant="h6" align="center" sx={{ p: {xs: 1, md: 2}}}>
-                    Game Settings
+                    SETTINGS
                 </Typography>
                 <Divider />
             </ListItem>
 
             <ListItem sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <Typography variant="body1" align="left" sx={{ pt: { xs: 1, md: 2 } }}>
-                    Presets
+                    PRESETS
                 </Typography>
             </ListItem>
             <ListItem divider sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>

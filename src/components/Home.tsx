@@ -31,9 +31,9 @@ function Home() {
         <>
             {/* <ThemeProvider theme={theme}> */}
                 <Container maxWidth='md'>
-                    <Card variant="outlined" sx={{ p: { xs: 1, md: 2 } }}>
+                    <Card variant="outlined" sx={{ p: { xs: 1, md: 2 }}}>
                         <Typography variant="h4" align="center" sx={{ p: {xs: 1, md: 2}}}>
-                            Think Faster Tactics!
+                            THINK FASTER TACTICS
                         </Typography>
                         <Divider />
                         <Typography variant="h5" sx={{ px: {xs: 1, md: 2}, pt: {xs: 1, md: 2} }}>
