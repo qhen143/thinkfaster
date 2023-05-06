@@ -6,6 +6,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import { Box } from '@mui/material';
 
 import Image from 'next/image'
 import logopng from '../public/icon-basic.png'
@@ -14,7 +15,7 @@ const font =  "'Yatra One', cursive";
 
 const darkTheme = createTheme({
   palette: {
-    mode: 'dark',
+    mode: 'dark'
   },
   typography: {
     fontFamily: font,
@@ -54,12 +55,24 @@ export default function HomePage() {
         >
           <Toolbar>
             <Icon/>
-            <Typography variant="h5" color="inherit" sx={{ px: {xs: 1, sm: 2}, py: {xs: 0.5, sm: 1} }}>
+            <Typography variant="h6" color="inherit" sx={{ px: {xs: 1, sm: 2}, py: {xs: 0.5, sm: 1} }}>
               Think Faster Tactics!
             </Typography>
           </Toolbar>
         </AppBar>
-        <Home/>
+        <Box sx={{ 
+          position: 'absolute', 
+          background: 'linear-gradient(#9198e5, #e66465)',
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+          <Home/>
+        </Box>
       </ThemeProvider>
     </>
   )

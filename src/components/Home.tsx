@@ -5,8 +5,7 @@ import mypic from '../../public/logo.svg'
 import logo from '../../public/icon-basic.svg'
 import uniticon from '../../public/Set8-Samira.jpg'
 import HexagonTile from "./HexagonTile";
-import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
-
+import ForwardRoundedIcon from '@mui/icons-material/ForwardRounded';
 
 function Home() {
 
@@ -37,7 +36,6 @@ function Home() {
                             Think Faster Tactics!
                         </Typography>
                         <Divider />
-                        //TODO add overview
                         <Typography variant="h5" sx={{ px: {xs: 1, md: 2}, pt: {xs: 1, md: 2} }}>
                             How to play
                         </Typography>
@@ -53,7 +51,7 @@ function Home() {
                                             <HexagonTile src={uniticon}/>
                                         </Stack>
                                         <Stack direction="row" alignItems="center" spacing={5}>
-                                            <KeyboardDoubleArrowRightIcon fontSize='large' sx={{}}/>
+                                            <ForwardRoundedIcon fontSize='large' sx={{}}/>
                                             <HexagonTile src={uniticon}/>
                                         </Stack>
                                     </Stack>
@@ -63,7 +61,6 @@ function Home() {
                                 <ListItemText primary="Do step 1 as fast as you can!" />
                             </ListItem>
                         </List>
-                        // TODO add detial instructions
                         <Typography variant="h6" sx={{ px: {xs: 1, md: 2}, pt: {xs: 1, md: 2} }}>
                             For more details, follow this <Link target="_blank" href="https://github.com/qhen143/thinkfaster#background">link</Link>.
                         </Typography>

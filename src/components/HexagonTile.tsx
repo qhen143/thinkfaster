@@ -1,6 +1,7 @@
 import { Box } from '@mui/material';
 import { CSSProperties } from '@mui/material/styles/createTypography';
 import Image, { StaticImageData } from 'next/image';
+import StarRateRoundedIcon from '@mui/icons-material/StarRounded';
 
 const HexagonTile = (props: {src: string | StaticImageData }) => {
   const style: CSSProperties = {
@@ -11,6 +12,9 @@ const HexagonTile = (props: {src: string | StaticImageData }) => {
 
     <Box className='hexagon'>
       <Box className='hexagon-inner'>
+        <Box sx={{ position: 'relative' }}>
+          <StarRateRoundedIcon sx={{ position: 'absolute', left: '10%', transform: 'translate(0, 130%)'}}/>
+        </Box>
         <Image src={props.src} alt="Hexagon" style={style}/>
       </Box>
     </Box>
