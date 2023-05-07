@@ -62,9 +62,9 @@ function App() {
 
   return (
     <StrictMode>
-    <div className={styles.App}>
+    {/* <div className={styles.App}> */}
       <Game pool={generateUnitPool()} settings={settings}/>
-    </div>
+    {/* </div> */}
     </StrictMode>
   );
 }

@@ -2,12 +2,11 @@ import { Html, Head, Main, NextScript } from 'next/document'
 
 export default function Document() {
     return (
-        <Html  lang="en">
+        <Html lang="en">
             <Head>
                 <link rel="preconnect" href="https://fonts.googleapis.com"/>
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-                <link href="https://fonts.googleapis.com/css2?family=Exo+2&family=Kanit:wght@300&family=Montserrat&family=Unbounded:wght@200&family=Yatra+One&display=swap" rel="stylesheet"/>
-                
+                <link href="https://fonts.googleapis.com/css2?family=Exo+2&display=swap" rel="stylesheet"/>                
                 {/* 
 					manifest.json provides metadata used when your web app is installed on a
 					user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/ 
