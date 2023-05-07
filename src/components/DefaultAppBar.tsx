@@ -1,4 +1,5 @@
 import { AppBar, Box, Button, Toolbar, Typography }  from '@mui/material';
+import Link from 'next/link';
 
 import Image from 'next/image'
 import logopng from '../../public/icon-basic.png'
@@ -16,7 +17,20 @@ function DefaultAppBar() {
         )
     }
 
-    const pages = ['Learn', 'About Us']
+    const pages = [ 
+        {
+            description: 'Play',
+            path: "/"
+        },
+        {
+            description: 'Rules',
+            path: "/rules"
+        }, 
+        {
+            description: 'About',
+            path: "/"
+        }
+    ]
 
     return (
         <AppBar
@@ -27,7 +41,7 @@ function DefaultAppBar() {
             }}
             >
             <Toolbar>
-                <Button startIcon={<Logo/>} sx={{ my: 2, color: 'white', display: 'flex' }} >
+                <Button startIcon={<Logo/>} LinkComponent={Link} href="/" sx={{ my: 2, color: 'white', display: 'flex' }} >
                     <Typography variant="h6" color="inherit" sx={{ px: {xs: 1, md: 2} }}>
                         THINK FASTER TACTICS
                     </Typography>
@@ -36,11 +50,13 @@ function DefaultAppBar() {
                 <Box justifyContent='flex-end' sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                     {pages.map((page) => (
                     <Button
-                        key={page}
+                        key={page.description}
                         // onClick={handleCloseNavMenu}
-                        sx={{ my: 2, color: 'white', display: 'block' }}
+                        LinkComponent={Link}
+                        href={page.path}
+                        sx={{ my: 2, px:2, color: 'white', display: 'block' }}
                     >
-                        {page}
+                        {page.description}
                     </Button>
                     ))}
                 </Box>

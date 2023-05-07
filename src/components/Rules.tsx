@@ -6,7 +6,7 @@ import HexagonTile from "./HexagonTile";
 import uniticon from '../../public/Set8-Samira.jpg'
 import ForwardRoundedIcon from '@mui/icons-material/ForwardRounded';
 
-function Learn() {
+function Rules() {
     const [activeStep, setActiveStep] = useState(0);
 
     const handleNext = () => {
@@ -69,8 +69,8 @@ function Learn() {
 
   return (
       <>
-        <Stack sx={{ width: '65%'}}>
-            <Box sx={{  p: { xs: 2, md: 4}, background: 'rgba(0, 0, 0, 0.6)'}}>
+        <Stack sx={{ width: '45%',  }}>
+            <Box minHeight={"65vh"} padding={4} sx={{ background:'rgba(0, 0, 0, 0.6)' }}>
                 {GetStep(activeStep)}
             </Box>
             <MobileStepper
@@ -78,15 +78,20 @@ function Learn() {
                 steps={steps.length}
                 position="static"
                 activeStep={activeStep}
-                sx={{ background: 'rgba(0, 0, 0, 0.6)'}}
+                sx={{ 
+                    background: 'rgba(0, 0, 0, 0.6)', 
+                    "& .MuiMobileStepper-dotActive": {
+                        backgroundColor: "text.primary",
+                    },
+                }}
                 nextButton={
-                  <Button size="small" onClick={handleNext} disabled={activeStep === steps.length-1}>
+                  <Button size="small" onClick={handleNext} disabled={activeStep === steps.length-1} sx={{ color: "text.primary" }}>
                       <KeyboardArrowRight />
                       Next
                   </Button>
                 }
                 backButton={
-                  <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
+                  <Button size="small" onClick={handleBack} disabled={activeStep === 0} sx={{ color: "text.primary" }}>
                       <KeyboardArrowLeft />
                       Back
                   </Button>
@@ -97,4 +102,4 @@ function Learn() {
   )
 }
 
-export default Learn;
+export default Rules;

@@ -1,9 +1,9 @@
-import Learn from '../src/components/Learn';
+import Rules from '../src/components/Rules';
 
 export default function HomePage() {
   return (
     <>
-        <Learn />
+        <Rules />
     </>
   )
 }
