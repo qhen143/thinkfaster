@@ -53,7 +53,7 @@ function SettingSlider(props: {
                         min={props.min} max={props.max}
                         valueLabelDisplay='auto'
                         marks={[{value: props.min, label: props.min}, {value: props.max, label: props.max}]}
-                        sx={{ my: { xs: 1, md: 2 } }}
+                        sx={{ my: { xs: 1, md: 2 }, color: "text.primary" }}
                     />
             </ListItem>
 

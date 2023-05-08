@@ -1,12 +1,10 @@
-import { Accordion, AccordionDetails, AccordionSummary, Box, Button, ButtonGroup, Card, Container, Divider, Drawer, FormControl, FormControlLabel, FormGroup, List, ListItem, Paper, Radio, RadioGroup, Slider, Switch, Typography } from "@mui/material";
-import Grid from '@mui/material/Unstable_Grid2';
+import { Button, ButtonGroup, Divider, FormControlLabel, FormGroup, List, ListItem, Switch, Typography } from "@mui/material";
 import SettingSlider from "./SettingSlider";
 import { useState } from "react";
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import MouseTracker from './MouseTracker';
 import { Settings } from "../types/Settings";
+import Link from "next/link";
 
-function Menu() {
+function Menu(props: {onClick: Function}) {
     enum Presets {
         Standard,
         ThinkFaster,
@@ -97,10 +95,6 @@ function Menu() {
         }
     }
 
-    const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSelectedValue(event.target.value);
-    };
-
     const handleSliderChange = (settingName: keyof Settings) => (event: Event, newValue: number | number[]) => {
         setSetting(x => ({...x, [settingName]: newValue as number}))
     }
@@ -122,14 +116,6 @@ function Menu() {
         );
     }
 
-    // function HighlightMouse(highlightMouse: boolean) {
-    //     if (!highlightMouse)
-    //         return <></>
-
-    //     return <MouseTracker/>;
-    // 
-
-    // TODO FONT
     return (
         <>
         <List dense sx={{ px: {xs: 3, md: 6} }}>
@@ -149,9 +135,9 @@ function Menu() {
                 <ButtonGroup aria-label="outlined button group" 
                     sx={{ pb: { xs: 1, md: 2 } }}
                 >
-                    <Button onClick={() => setPresets(Presets.Standard)}>Default</Button>
-                    <Button onClick={() => setPresets(Presets.ThinkFaster)}>Think Faster</Button>
-                    <Button onClick={() => setPresets(Presets.Blitz)}>Blitz</Button>
+                    <Button onClick={() => setPresets(Presets.Standard)} sx={{ color: "text.primary" }}>Default</Button>
+                    <Button onClick={() => setPresets(Presets.ThinkFaster)} sx={{ color: "text.primary" }}>Think Faster</Button>
+                    <Button onClick={() => setPresets(Presets.Blitz)} sx={{ color: "text.primary" }}>Blitz</Button>
                 </ButtonGroup>
             </ListItem>
 
@@ -173,11 +159,13 @@ function Menu() {
                 <Button
                     variant="contained"
                     size="large"
-                    // onClick={handleNext}
-                    // sx={{ mt: 3}}
+                    LinkComponent={Link}
+                    onClick={() => props.onClick()}
+                    href={"/game"}
+                    // sx={{ mt: 3, color: "text.primary"}}
                 >
                     <Typography component="h1" variant="h6" align="center">
-                        Play
+                        BEGIN
                     </Typography>
                 </Button>
             </ListItem>

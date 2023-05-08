@@ -18,72 +18,15 @@ function Home() {
 
     return (
         <>
-            <Grid container minWidth={1} spacing={15} sx={{ mt: 5}} columns={16}>
-                <Grid xs={1}/>
-                <Grid xs={7}>
-                    <Box display="block" padding={4} sx={{ background:'rgba(0, 0, 0, 0.6)' }}>
-                        <Typography variant="h5" sx={{  px: {xs: 3, md: 6}, py: {xs: 1, md: 2} }}>
-                            Teamfight Tactics (TFT)
-                        </Typography>
-                        <Divider />
-                        <Typography variant="body1" sx={{ px: {xs: 3, md: 6}, py: {xs: 1, md: 2} }}>
-                            Teamfight Tactics is a popular auto battler game mode within the video game, League of Legends. 
-                        </Typography>
-                        <Typography variant="body1" sx={{ px: {xs: 3, md: 6}, py: {xs: 1, md: 2} }}>
-                            In TFT, players assemble a team of champions and strategically position them on a board to battle against other players' teams. 
-                        </Typography>
-                    </Box>
-                </Grid>
-                <Grid xs={1}/>
-                <Grid xs={5}>
-                    <Image src={pengu} alt="pengu" height={500}/>
-                </Grid>
-                <Grid xs={2}/>
-
-
-
-                <Grid xs={2}/>
-                <Grid xs={4}>
-                    <Image src={logo} alt="logo" height={500}/>
-                </Grid>
-                <Grid xs={2}/>
-                <Grid xs={7}>
-                    <Box display="block" padding={4} sx={{ background:'rgba(0, 0, 0, 0.6)' }}>
-                        <Typography variant="h5" sx={{  px: {xs: 3, md: 6}, py: {xs: 1, md: 2} }}>
-                            What is Think Fast?
-                        </Typography>
-                        <Divider />
-                        <Typography variant="body1" sx={{ px: {xs: 3, md: 6}, py: {xs: 1, md: 2} }}>
-                            In TFT, augments are gameplay modifiers that can be used to add variety to the game. Think Fast is an augment that does the following: 
-                        </Typography>
-                        <Typography variant="body1" sx={{ px: {xs: 3, md: 6}, py: {xs: 1, md: 2} }}>
-                            <i>"Shop refreshes are free until the end of this round. Traits and other augments do not benefit from these free shops."</i>
-                        </Typography>
-                    </Box>
-                </Grid>
-                <Grid xs={1}/>
-
-
-                <Grid xs={1}/>
-                <Grid xs={7}>
-                    <Box display="block" padding={4} sx={{ background:'rgba(0, 0, 0, 0.6)' }}>
-                        <Typography variant="h5" sx={{  px: {xs: 3, md: 6}, py: {xs: 1, md: 2} }}>
-                            THINK FASTER TACTICS
-                        </Typography>
-                        <Divider />
-                        <Typography variant="body1" sx={{ px: {xs: 3, md: 6}, py: {xs: 1, md: 2} }}>
-                            An expiremental sandbox environment based on Teamfight Tactics.
-                        </Typography>
-                    </Box>
-                </Grid>
-                <Grid xs={1}/>
-                <Grid xs={5}>
-                    <Image src={pengu} alt="pengu" height={500}/>
-                </Grid>
-                <Grid xs={2}/>
-
-
-            </Grid>
+            <Box display="block" padding={4} sx={{ background:'rgba(0, 0, 0, 0.6)', borderRadius: 3, boxShadow: 25  }}>
+                <Typography variant="h5" sx={{  px: {xs: 3, md: 6}, py: {xs: 1, md: 2} }}>
+                    THINK FASTER TACTICS
+                </Typography>
+                <Divider />
+                <Typography variant="body1" sx={{ px: {xs: 3, md: 6}, py: {xs: 1, md: 2} }}>
+                    An expiremental sandbox environment based on Teamfight Tactics.
+                </Typography>
+            </Box>
 
                     {/* <Box minWidth={"45%"} padding={4} sx={{ background:'rgba(0, 0, 0, 0.6)' }}>
                     <Typography variant="h5" sx={{ px: {xs: 1, md: 2}, py: {xs: 1, md: 2} }}>
@@ -119,7 +62,7 @@ function Home() {
                             <VideoSettingsRoundedIcon fontSize="large" color="action"/>
                         </Button>
                     </Box> */}
-                    <Drawer
+                    {/* <Drawer
                             anchor="right"
                             open={open}
                             onClose={() => toggleDrawer(open)}
@@ -142,7 +85,7 @@ function Home() {
                             }}
                     >
                         <Menu />
-                    </Drawer>
+                    </Drawer> */}
                 {/* </Box> */}
         </>
     )
